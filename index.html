@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claudio Meneses Donoso — Desarrollador Full Stack</title>
+    <meta name="description" content="Desarrollador Full Stack con más de 14 años de experiencia en .NET, Java, React, Vue.js, Node.js y más. Especializado en soluciones de calidad para retail, e-commerce, minería y sector público.">
+    <meta property="og:title" content="Claudio Meneses Donoso — Desarrollador Full Stack">
+    <meta property="og:description" content="Desarrollador Full Stack con más de 14 años de experiencia en desarrollo de software.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">CMD<span class="accent">.</span></a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about" class="nav-link">Sobre mí</a></li>
+                <li><a href="#experience" class="nav-link">Experiencia</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#education" class="nav-link">Educación</a></li>
+                <li><a href="#certifications" class="nav-link">Cursos</a></li>
+                <li><a href="#contact" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-effects">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <p class="hero-greeting reveal">Hola, soy</p>
+                <h1 class="hero-name reveal">Claudio Meneses<br><span class="accent">Donoso</span></h1>
+                <p class="hero-title reveal">Desarrollador Full Stack</p>
+                <p class="hero-location reveal">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Ñuñoa, Santiago, Chile
+                </p>
+                <div class="hero-actions reveal">
+                    <a href="mailto:cmenesesd@gmail.com" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        Contáctame
+                    </a>
+                    <a href="resume.pdf" download class="btn btn-outline">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Descargar CV
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual reveal">
+                <div class="hero-avatar">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-initials">CM</div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="stat-number">14+</span>
+                        <span class="stat-label">Años de Experiencia</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">6+</span>
+                        <span class="stat-label">Empresas</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Tecnologías</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title reveal">Sobre <span class="accent">Mí</span></h2>
+            <div class="about-content reveal">
+                <div class="about-text">
+                    <p>Con más de <strong>14 años de experiencia</strong> en desarrollo de software en diversas industrias como <strong>retail, comercio electrónico, minería y televisión</strong>, aporto un fuerte enfoque en la calidad, las mejores prácticas y la innovación.</p>
+                    <p>Destaco en impulsar la <strong>mejora continua</strong>, promover el trabajo en equipo eficiente y fomentar un ambiente laboral positivo y colaborativo para entregar soluciones impactantes.</p>
+                </div>
+                <div class="about-details">
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <a href="mailto:cmenesesd@gmail.com">cmenesesd@gmail.com</a>
+                    </div>
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <a href="tel:+56982275552">+569 8227 5552</a>
+                    </div>
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>Ñuñoa, Santiago, Chile</span>
+                    </div>
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <span>Español (Nativo) · Inglés (C1)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section section-alt" id="experience">
+        <div class="container">
+            <h2 class="section-title reveal">Experiencia <span class="accent">Profesional</span></h2>
+            <div class="timeline">
+                <!-- Sonda -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 class="timeline-role">Desarrollador Full Stack</h3>
+                                <p class="timeline-company">Sonda · Santiago, Chile</p>
+                            </div>
+                            <span class="timeline-date">Dic 2024 — Presente</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li>Creación de web responsiva para declaración y gestión de impuestos para el SII, con Vue.js y Java Spring Boot 3, implementando cálculos tributarios complejos.</li>
+                            <li>Desarrollo del proceso de pago anual a la Tesorería General de la República para Sernageomin, usando .NET Core 7, React y SQL Server 2019.</li>
+                            <li>Mantenimiento de API basada en OCDS para ChileCompra (.NET Framework 4.8 y SQL Server 2019).</li>
+                            <li>Modernización del sitio web de Ohio National / AuguStar Seguros con PHP, WordPress y MySQL.</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">Spring Boot 3</span>
+                            <span class="tag">.NET Core 7</span>
+                            <span class="tag">React</span>
+                            <span class="tag">SQL Server</span>
+                            <span class="tag">PHP</span>
+                            <span class="tag">WordPress</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RDA Corporation -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 class="timeline-role">Analista QA / Automatización</h3>
+                                <p class="timeline-company">RDA Corporation · Remoto (US)</p>
+                            </div>
+                            <span class="timeline-date">Ene 2023 — Oct 2024</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li>Diseño y ejecución de casos de prueba completos para garantizar calidad y fiabilidad del software.</li>
+                            <li>Pruebas exhaustivas de UI y API para validar funcionalidad y rendimiento.</li>
+                            <li>Scripts de automatización robustos con Cypress y TypeScript.</li>
+                            <li>Implementación de pipelines CI/CD con Azure DevOps.</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">Cypress</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">Azure DevOps</span>
+                            <span class="tag">CI/CD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- A&B Solutions Pro -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 class="timeline-role">Desarrollador Full Stack · Analista de Proyectos</h3>
+                                <p class="timeline-company">A&B Solutions Pro · Santiago, Chile</p>
+                            </div>
+                            <span class="timeline-date">Nov 2017 — Dic 2021</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li>Líder de proyectos con gestión y entrega de soluciones complejas.</li>
+                            <li>Desarrollo completo de sisenior.cl con PHP, WordPress y MySQL.</li>
+                            <li>Proyecto de software de cobranzas con .NET ASP y SQL Server.</li>
+                            <li>Sistema de distribución personalizado para Minera Las Cenizas con PHP, Laravel y MySQL.</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">PHP</span>
+                            <span class="tag">Laravel</span>
+                            <span class="tag">.NET ASP</span>
+                            <span class="tag">WordPress</span>
+                            <span class="tag">MySQL</span>
+                            <span class="tag">SQL Server</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VMICA -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 class="timeline-role">Desarrollador Full Stack · Analista de Proyectos</h3>
+                                <p class="timeline-company">VMICA · Providencia, Chile</p>
+                            </div>
+                            <span class="timeline-date">Feb 2014 — Oct 2017</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li>Desarrollador líder en solución propietaria en .NET ASP/C# y PL/SQL para la división DTH de Entel.</li>
+                            <li>Servicios web con WebLogic Java para Entel y Claro.</li>
+                            <li>Servicios de informes y carga de datos en Unix con scripts Bash.</li>
+                            <li>Equipos Agile/Scrum entregando soluciones alineadas con objetivos del cliente.</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">.NET ASP/C#</span>
+                            <span class="tag">PL/SQL</span>
+                            <span class="tag">Java</span>
+                            <span class="tag">Oracle</span>
+                            <span class="tag">SQL Server</span>
+                            <span class="tag">Bash</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Retail Services -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 class="timeline-role">Desarrollador .Net · Analista de Proyectos</h3>
+                                <p class="timeline-company">Retail Services · Providencia, Chile</p>
+                            </div>
+                            <span class="timeline-date">Jun 2011 — Ene 2014</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li>Soluciones retail con .NET, FoxPro y MS SQL Server.</li>
+                            <li>Integraciones con plataformas de pago: Transbank, Multicaja y S4M.</li>
+                            <li>Implementación de sistemas retail en múltiples supermercados.</li>
+                            <li>Integración de DTE en software propietario, compatible con diversos ERP.</li>
+                            <li>Soluciones móviles e integración de hardware (balanzas, colectores de datos, impresoras).</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">.NET</span>
+                            <span class="tag">SQL Server</span>
+                            <span class="tag">FoxPro</span>
+                            <span class="tag">DTE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CST Solutions -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 class="timeline-role">Desarrollador .Net</h3>
+                                <p class="timeline-company">CST Solutions · Ñuñoa, Chile</p>
+                            </div>
+                            <span class="timeline-date">May 2010 — May 2011</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li>Soluciones retail con .NET Mobile y SQL Server CE, incluyendo apps móviles para gestión de inventarios.</li>
+                            <li>Implementación de sistemas en múltiples cadenas de supermercados.</li>
+                            <li>Soporte integral al cliente garantizando alta satisfacción.</li>
+                        </ul>
+                        <div class="timeline-tags">
+                            <span class="tag">.NET Mobile</span>
+                            <span class="tag">SQL Server CE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <h2 class="section-title reveal">Skills <span class="accent">Técnicas</span></h2>
+            <div class="skills-grid">
+                <div class="skill-category reveal">
+                    <div class="skill-category-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <h3>Backend</h3>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag backend">.NET ASP / C#</span>
+                        <span class="skill-tag backend">Java</span>
+                        <span class="skill-tag backend">Spring Boot</span>
+                        <span class="skill-tag backend">PHP</span>
+                        <span class="skill-tag backend">Node.js</span>
+                        <span class="skill-tag backend">Laravel</span>
+                    </div>
+                </div>
+                <div class="skill-category reveal">
+                    <div class="skill-category-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                        <h3>Frontend</h3>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag frontend">React</span>
+                        <span class="skill-tag frontend">Vue.js</span>
+                        <span class="skill-tag frontend">JavaScript</span>
+                        <span class="skill-tag frontend">TypeScript</span>
+                        <span class="skill-tag frontend">Bootstrap</span>
+                    </div>
+                </div>
+                <div class="skill-category reveal">
+                    <div class="skill-category-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        </svg>
+                        <h3>Bases de Datos</h3>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag database">SQL Server</span>
+                        <span class="skill-tag database">MySQL</span>
+                        <span class="skill-tag database">Oracle</span>
+                    </div>
+                </div>
+                <div class="skill-category reveal">
+                    <div class="skill-category-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                        <h3>DevOps & QA</h3>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag devops">CI/CD</span>
+                        <span class="skill-tag devops">Git</span>
+                        <span class="skill-tag devops">Azure DevOps</span>
+                        <span class="skill-tag devops">Bitbucket</span>
+                        <span class="skill-tag devops">Jira</span>
+                        <span class="skill-tag devops">Cypress</span>
+                        <span class="skill-tag devops">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section section-alt" id="education">
+        <div class="container">
+            <h2 class="section-title reveal">Educación <span class="accent">& Idiomas</span></h2>
+            <div class="education-grid">
+                <div class="education-card reveal">
+                    <div class="education-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"></path>
+                        </svg>
+                    </div>
+                    <h3>Técnico en Informática</h3>
+                    <p class="education-school">Universidad De Los Lagos</p>
+                    <p class="education-date">Marzo 2005 — Diciembre 2007</p>
+                </div>
+                <div class="education-card reveal">
+                    <div class="education-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <h3>Idiomas</h3>
+                    <div class="language-bars">
+                        <div class="language-item">
+                            <div class="language-info">
+                                <span>Español</span>
+                                <span class="language-level">Nativo</span>
+                            </div>
+                            <div class="language-bar">
+                                <div class="language-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="language-item">
+                            <div class="language-info">
+                                <span>Inglés</span>
+                                <span class="language-level">C1 — Avanzado</span>
+                            </div>
+                            <div class="language-bar">
+                                <div class="language-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section class="section" id="certifications">
+        <div class="container">
+            <h2 class="section-title reveal">Formación <span class="accent">Adicional</span></h2>
+            <div class="certifications-grid">
+                <div class="cert-card reveal">
+                    <div class="cert-hours">135.5h</div>
+                    <h4>Java</h4>
+                    <p>Udemy · Feb — Mar 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">56h</div>
+                    <h4>Data Engineering</h4>
+                    <p>SQL, Python & PySpark</p>
+                    <p>Udemy · Ene — Feb 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">42.5h</div>
+                    <h4>Node.js</h4>
+                    <p>Udemy · Feb 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">40.5h</div>
+                    <h4>Spring Framework 6 / Spring Boot 3</h4>
+                    <p>Udemy · Ene 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">21.5h</div>
+                    <h4>Bootstrap</h4>
+                    <p>Udemy · Mar 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">18h</div>
+                    <h4>ASP.Net Core 8</h4>
+                    <p>Udemy · Mar 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">12.5h</div>
+                    <h4>Docker</h4>
+                    <p>Udemy · Mar 2025</p>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-hours">5h</div>
+                    <h4>Oracle BPM 12c</h4>
+                    <p>Udemy · Ene 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section class="section section-alt" id="references">
+        <div class="container">
+            <h2 class="section-title reveal">Referencias <span class="accent">Profesionales</span></h2>
+            <div class="references-grid">
+                <div class="reference-card reveal">
+                    <div class="reference-avatar">JC</div>
+                    <h4>Jorge Carabajal</h4>
+                    <p class="reference-company">Forte Group</p>
+                    <div class="reference-contact">
+                        <a href="tel:+543517606418">+54 351 760 6418</a>
+                        <a href="mailto:jcarabajal1989@gmail.com">jcarabajal1989@gmail.com</a>
+                    </div>
+                </div>
+                <div class="reference-card reveal">
+                    <div class="reference-avatar">IA</div>
+                    <h4>Ivan Arancibia</h4>
+                    <p class="reference-company">VMICA</p>
+                    <div class="reference-contact">
+                        <a href="tel:+56996105253">+569 9610 5253</a>
+                        <a href="mailto:Ivan.Arancibia.S@gmail.com">Ivan.Arancibia.S@gmail.com</a>
+                    </div>
+                </div>
+                <div class="reference-card reveal">
+                    <div class="reference-avatar">RC</div>
+                    <h4>Rodrigo Campos</h4>
+                    <p class="reference-company">VMICA</p>
+                    <div class="reference-contact">
+                        <a href="tel:+56987633487">+569 8763 3487</a>
+                        <a href="mailto:camposmatus@gmail.com">camposmatus@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h2 class="footer-name">Claudio Meneses <span class="accent">Donoso</span></h2>
+                    <p>Desarrollador Full Stack</p>
+                </div>
+                <div class="footer-links">
+                    <a href="mailto:cmenesesd@gmail.com" class="footer-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        cmenesesd@gmail.com
+                    </a>
+                    <a href="tel:+56982275552" class="footer-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        +569 8227 5552
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Claudio Meneses Donoso. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
