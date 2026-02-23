@@ -40,6 +40,34 @@
     --container-max: 1100px;
 }
 
+/* Light Theme */
+:root[data-theme="light"] {
+    --bg-primary: #f5f5f8;
+    --bg-secondary: #eaeaef;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f0f0f5;
+    --bg-glass: rgba(255, 255, 255, 0.75);
+
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a60;
+    --text-muted: #7a7a90;
+
+    --accent: #5b52e0;
+    --accent-light: #6c63ff;
+    --accent-dark: #4840b8;
+    --accent-glow: rgba(108, 99, 255, 0.1);
+
+    --gradient-card: linear-gradient(145deg, rgba(108, 99, 255, 0.05) 0%, rgba(168, 85, 247, 0.02) 100%);
+
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-accent: rgba(108, 99, 255, 0.25);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 30px rgba(108, 99, 255, 0.1);
+}
+
 /* ===========================
    Reset & Base
    =========================== */
@@ -221,6 +249,124 @@ ul {
 .lang-option.active {
     color: var(--accent-light);
     text-shadow: 0 0 8px rgba(108, 99, 255, 0.4);
+}
+
+/* Nav Actions Container */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    border-color: var(--border-accent);
+    color: var(--accent-light);
+    transform: rotate(15deg);
+}
+
+.theme-icon {
+    transition: all 0.3s ease;
+}
+
+/* Dark mode: show sun (to switch to light), hide moon */
+.theme-icon.sun {
+    display: block;
+}
+
+.theme-icon.moon {
+    display: none;
+}
+
+/* Light mode: show moon (to switch to dark), hide sun */
+[data-theme="light"] .theme-icon.sun {
+    display: none;
+}
+
+[data-theme="light"] .theme-icon.moon {
+    display: block;
+}
+
+/* Light theme overrides */
+[data-theme="light"] .navbar.scrolled {
+    background: rgba(245, 245, 248, 0.9);
+}
+
+[data-theme="light"] .nav-menu {
+    background: rgba(245, 245, 248, 0.98);
+}
+
+[data-theme="light"] .nav-toggle span {
+    background: var(--text-primary);
+}
+
+[data-theme="light"] .hero-orb-1 {
+    background: rgba(108, 99, 255, 0.12);
+}
+
+[data-theme="light"] .hero-orb-2 {
+    background: rgba(168, 85, 247, 0.08);
+}
+
+[data-theme="light"] .hero-orb-3 {
+    background: rgba(236, 72, 153, 0.06);
+}
+
+[data-theme="light"] .avatar-initials {
+    border-color: var(--bg-primary);
+}
+
+[data-theme="light"] .skill-tag.backend {
+    background: rgba(22, 163, 74, 0.08);
+    color: #16a34a;
+    border-color: rgba(22, 163, 74, 0.2);
+}
+
+[data-theme="light"] .skill-tag.frontend {
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+[data-theme="light"] .skill-tag.database {
+    background: rgba(217, 119, 6, 0.08);
+    color: #d97706;
+    border-color: rgba(217, 119, 6, 0.2);
+}
+
+[data-theme="light"] .skill-tag.devops {
+    background: rgba(219, 39, 119, 0.08);
+    color: #db2777;
+    border-color: rgba(219, 39, 119, 0.2);
+}
+
+[data-theme="light"] .timeline-marker {
+    border-color: var(--bg-secondary);
+}
+
+[data-theme="light"] .tag {
+    background: rgba(108, 99, 255, 0.08);
+}
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* ===========================
@@ -1187,7 +1333,7 @@ a.cert-card:hover .cert-link-icon {
         display: flex;
     }
 
-    .lang-toggle {
+    .nav-actions {
         margin-left: auto;
         margin-right: 12px;
     }

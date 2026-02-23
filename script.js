@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Scroll Reveal Animation ----
     const revealElements = document.querySelectorAll('.reveal');
-    
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', () => {
         const currentScroll = window.scrollY;
-        
+
         if (currentScroll > 50) {
             navbar.classList.add('scrolled');
         } else {
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Active nav link on scroll ----
     const sections = document.querySelectorAll('section[id]');
-    
+
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Animate language bars on scroll ----
     const languageFills = document.querySelectorAll('.language-fill');
-    
+
     const langObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -109,15 +109,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Parallax on hero orbs ----
     const orbs = document.querySelectorAll('.hero-orb');
-    
+
     window.addEventListener('mousemove', (e) => {
         const x = (e.clientX / window.innerWidth - 0.5) * 2;
         const y = (e.clientY / window.innerHeight - 0.5) * 2;
-        
+
         orbs.forEach((orb, i) => {
             const speed = (i + 1) * 15;
             orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
         });
     }, { passive: true });
+
+    // ---- Theme Toggle (Light / Dark) ----
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+
+    function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('preferred-theme', theme);
+    }
+
+    // Initialize theme from storage or system preference
+    const savedTheme = localStorage.getItem('preferred-theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        setTheme('light');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        const current = root.getAttribute('data-theme');
+        setTheme(current === 'light' ? 'dark' : 'light');
+    });
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('preferred-theme')) {
+            setTheme(e.matches ? 'light' : 'dark');
+        }
+    });
 
 });
