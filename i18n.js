@@ -36,6 +36,7 @@ const translations = {
         'exp.sonda.d2': 'Desarrollo del proceso de pago anual a la Tesorería General de la República para Sernageomin, usando .NET Core 7, React y SQL Server 2019.',
         'exp.sonda.d3': 'Mantenimiento de API basada en OCDS para ChileCompra (.NET Framework 4.8 y SQL Server 2019).',
         'exp.sonda.d4': 'Modernización del sitio web de Ohio National / AuguStar Seguros con PHP, WordPress y MySQL.',
+        'exp.sonda.d5': 'Liderando la adopción de Agentes de IA en la empresa, impulsando el uso de Cursor, Claude y otros agentes para acelerar el desarrollo y la automatización.',
 
         'exp.rda.role': 'Analista QA / Automatización',
         'exp.rda.date': 'Ene 2023 — Oct 2024',
@@ -101,6 +102,7 @@ const translations = {
         'skills.title': 'Skills <span class="accent">Técnicas</span>',
         'skills.databases': 'Bases de Datos',
         'skills.devops': 'DevOps & QA',
+        'skills.aitools': 'AI Tools',
 
         // References
         'refs.title': 'Referencias <span class="accent">Profesionales</span>',
@@ -150,6 +152,7 @@ const translations = {
         'exp.sonda.d2': 'Developed the annual payment process for the General Treasury of the Republic for Sernageomin, using .NET Core 7, React, and SQL Server 2019.',
         'exp.sonda.d3': 'Maintained OCDS-based API for ChileCompra (.NET Framework 4.8 and SQL Server 2019).',
         'exp.sonda.d4': 'Modernized the Ohio National / AuguStar Insurance website using PHP, WordPress, and MySQL.',
+        'exp.sonda.d5': 'Leading the company-wide adoption of AI Agents, driving usage of Cursor, Claude and other agents to accelerate development and automation.',
 
         'exp.rda.role': 'QA Analyst / Automation',
         'exp.rda.date': 'Jan 2023 — Oct 2024',
@@ -215,6 +218,7 @@ const translations = {
         'skills.title': 'Technical <span class="accent">Skills</span>',
         'skills.databases': 'Databases',
         'skills.devops': 'DevOps & QA',
+        'skills.aitools': 'AI Tools',
 
         // References
         'refs.title': 'Professional <span class="accent">References</span>',

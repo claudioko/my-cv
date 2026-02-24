@@ -1275,6 +1275,10 @@ body.custom-cursor * {
     background: linear-gradient(90deg, #ec4899, #f472b6);
 }
 
+.aitools .skill-bar-fill {
+    background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
 /* Also keep tag styles for use elsewhere */
 .skill-tag {
     font-size: 0.85rem;
