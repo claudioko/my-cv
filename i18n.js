@@ -94,6 +94,10 @@ const translations = {
 
         // Footer
         'footer.role': 'Desarrollador Full Stack',
+        'footer.tagline': 'Construyendo software que importa, una línea a la vez.',
+        'footer.nav_title': 'Navegación',
+        'footer.contact_title': 'Contacto',
+        'footer.open_badge': 'Disponible para nuevos proyectos',
         'footer.rights': '© 2025 Claudio Meneses Donoso. Todos los derechos reservados.',
     },
 
@@ -188,6 +192,10 @@ const translations = {
 
         // Footer
         'footer.role': 'Full Stack Developer',
+        'footer.tagline': 'Building software that matters, one line at a time.',
+        'footer.nav_title': 'Navigation',
+        'footer.contact_title': 'Contact',
+        'footer.open_badge': 'Available for new projects',
         'footer.rights': '© 2025 Claudio Meneses Donoso. All rights reserved.',
     }
 };
