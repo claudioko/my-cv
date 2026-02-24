@@ -88,6 +88,19 @@ const translations = {
 
         // Certifications
         'certs.title': 'Formación <span class="accent">Adicional</span>',
+        'certs.java.date': 'Udemy · Feb — Mar 2025',
+        'certs.dataeng.date': 'Udemy · Ene — Feb 2025',
+        'certs.nodejs.date': 'Udemy · Feb 2025',
+        'certs.spring.date': 'Udemy · Ene 2025',
+        'certs.bootstrap.date': 'Udemy · Mar 2025',
+        'certs.aspnet.date': 'Udemy · Mar 2025',
+        'certs.docker.date': 'Udemy · Mar 2025',
+        'certs.oracle.date': 'Udemy · Ene 2025',
+
+        // Skills
+        'skills.title': 'Skills <span class="accent">Técnicas</span>',
+        'skills.databases': 'Bases de Datos',
+        'skills.devops': 'DevOps & QA',
 
         // References
         'refs.title': 'Referencias <span class="accent">Profesionales</span>',
@@ -98,7 +111,10 @@ const translations = {
         'footer.nav_title': 'Navegación',
         'footer.contact_title': 'Contacto',
         'footer.open_badge': 'Disponible para nuevos proyectos',
-        'footer.rights': '© 2025 Claudio Meneses Donoso. Todos los derechos reservados.',
+        'footer.rights': '© 2026 Claudio Meneses Donoso. Todos los derechos reservados.',
+        'footer.location': 'Ñuñoa, Santiago, Chile',
+        'footer.made_with': 'Hecho con ❤️ en Santiago, Chile',
+        'footer.source_code': '🔗 Ver proyecto en',
     },
 
     en: {
@@ -186,6 +202,19 @@ const translations = {
 
         // Certifications
         'certs.title': 'Additional <span class="accent">Training</span>',
+        'certs.java.date': 'Udemy · Feb — Mar 2025',
+        'certs.dataeng.date': 'Udemy · Jan — Feb 2025',
+        'certs.nodejs.date': 'Udemy · Feb 2025',
+        'certs.spring.date': 'Udemy · Jan 2025',
+        'certs.bootstrap.date': 'Udemy · Mar 2025',
+        'certs.aspnet.date': 'Udemy · Mar 2025',
+        'certs.docker.date': 'Udemy · Mar 2025',
+        'certs.oracle.date': 'Udemy · Jan 2025',
+
+        // Skills
+        'skills.title': 'Technical <span class="accent">Skills</span>',
+        'skills.databases': 'Databases',
+        'skills.devops': 'DevOps & QA',
 
         // References
         'refs.title': 'Professional <span class="accent">References</span>',
@@ -196,7 +225,10 @@ const translations = {
         'footer.nav_title': 'Navigation',
         'footer.contact_title': 'Contact',
         'footer.open_badge': 'Available for new projects',
-        'footer.rights': '© 2025 Claudio Meneses Donoso. All rights reserved.',
+        'footer.rights': '© 2026 Claudio Meneses Donoso. All rights reserved.',
+        'footer.location': 'Ñuñoa, Santiago, Chile',
+        'footer.made_with': 'Made with ❤️ in Santiago, Chile',
+        'footer.source_code': '🔗 See project on',
     }
 };
 
