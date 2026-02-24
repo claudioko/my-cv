@@ -879,7 +879,6 @@ body.custom-cursor * {
 
 .code-line {
     display: block;
-    white-space: pre;
 }
 
 .c-kw {
