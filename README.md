@@ -2,7 +2,7 @@
 
 > Personal CV website built with vanilla HTML, CSS and JavaScript. Features modern design with dark/light mode, bilingual support (ES/EN), and interactive animations.
 
-**🔗 Live:** [claudioko.github.io/mycv-web](https://claudioko.github.io/mycv-web) *(update with actual URL)*
+**🔗 Live:** [claudioko.github.io/my-cv](https://claudioko.github.io/my-cv)
 
 ---
 
@@ -24,7 +24,7 @@
 ## 🗂️ Project Structure
 
 ```
-mycv-web/
+my-cv/
 ├── index.html      # Main HTML — all sections
 ├── styles.css      # All styles & responsive media queries
 ├── script.js       # Animations, interactions & behaviour
