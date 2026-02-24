@@ -15,6 +15,7 @@ const translations = {
         // Hero
         'hero.greeting': 'Hola, soy',
         'hero.title': 'Desarrollador Full Stack',
+        'hero.live_badge': 'Actualmente en Sonda · Santiago',
         'hero.contact_btn': 'Contáctame',
         'hero.download_btn': 'Descargar CV',
         'hero.stat_years': 'Años de Experiencia',
@@ -108,6 +109,7 @@ const translations = {
         // Hero
         'hero.greeting': 'Hi, I\'m',
         'hero.title': 'Full Stack Developer',
+        'hero.live_badge': 'Currently at Sonda · Santiago',
         'hero.contact_btn': 'Contact Me',
         'hero.download_btn': 'Download CV',
         'hero.stat_years': 'Years of Experience',
