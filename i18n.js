@@ -15,6 +15,7 @@ const translations = {
         // Hero
         'hero.greeting': 'Hola, soy',
         'hero.title': 'Desarrollador Full Stack',
+        'hero.live_badge': 'Actualmente en Sonda · Santiago',
         'hero.contact_btn': 'Contáctame',
         'hero.download_btn': 'Descargar CV',
         'hero.stat_years': 'Años de Experiencia',
@@ -93,6 +94,10 @@ const translations = {
 
         // Footer
         'footer.role': 'Desarrollador Full Stack',
+        'footer.tagline': 'Construyendo software que importa, una línea a la vez.',
+        'footer.nav_title': 'Navegación',
+        'footer.contact_title': 'Contacto',
+        'footer.open_badge': 'Disponible para nuevos proyectos',
         'footer.rights': '© 2025 Claudio Meneses Donoso. Todos los derechos reservados.',
     },
 
@@ -108,6 +113,7 @@ const translations = {
         // Hero
         'hero.greeting': 'Hi, I\'m',
         'hero.title': 'Full Stack Developer',
+        'hero.live_badge': 'Currently at Sonda · Santiago',
         'hero.contact_btn': 'Contact Me',
         'hero.download_btn': 'Download CV',
         'hero.stat_years': 'Years of Experience',
@@ -186,6 +192,10 @@ const translations = {
 
         // Footer
         'footer.role': 'Full Stack Developer',
+        'footer.tagline': 'Building software that matters, one line at a time.',
+        'footer.nav_title': 'Navigation',
+        'footer.contact_title': 'Contact',
+        'footer.open_badge': 'Available for new projects',
         'footer.rights': '© 2025 Claudio Meneses Donoso. All rights reserved.',
     }
 };
