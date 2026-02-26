@@ -39,6 +39,7 @@ const translations = {
         'exp.sonda.d5': 'Liderando la adopción de Agentes de IA en la empresa, impulsando el uso de Cursor, Claude y otros agentes para acelerar el desarrollo y la automatización.',
 
         'exp.rda.role': 'Analista QA / Automatización',
+        'exp.rda.company': 'RDA Corporation · Remoto (US)',
         'exp.rda.date': 'Ene 2023 — Oct 2024',
         'exp.rda.d1': 'Diseño y ejecución de casos de prueba completos para garantizar calidad y fiabilidad del software.',
         'exp.rda.d2': 'Pruebas exhaustivas de UI y API para validar funcionalidad y rendimiento.',
@@ -155,6 +156,7 @@ const translations = {
         'exp.sonda.d5': 'Leading the company-wide adoption of AI Agents, driving usage of Cursor, Claude and other agents to accelerate development and automation.',
 
         'exp.rda.role': 'QA Analyst / Automation',
+        'exp.rda.company': 'RDA Corporation · Remote (US)',
         'exp.rda.date': 'Jan 2023 — Oct 2024',
         'exp.rda.d1': 'Designed and executed comprehensive test cases to ensure software quality and reliability.',
         'exp.rda.d2': 'Thorough UI and API testing to validate functionality and performance.',
