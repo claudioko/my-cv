@@ -47,7 +47,7 @@ const translations = {
         'exp.rda.d4': 'Implementación de pipelines CI/CD con Azure DevOps.',
 
         'exp.ab.role': 'Desarrollador Full Stack · Analista de Proyectos',
-        'exp.ab.date': 'Nov 2017 — Dic 2021',
+        'exp.ab.date': 'Nov 2017 — Sep 2022',
         'exp.ab.d1': 'Líder de proyectos con gestión y entrega de soluciones complejas.',
         'exp.ab.d2': 'Desarrollo completo de sisenior.cl con PHP, WordPress y MySQL.',
         'exp.ab.d3': 'Proyecto de software de cobranzas con .NET ASP y SQL Server.',
@@ -164,7 +164,7 @@ const translations = {
         'exp.rda.d4': 'Implemented CI/CD pipelines using Azure DevOps.',
 
         'exp.ab.role': 'Full Stack Developer · Project Analyst',
-        'exp.ab.date': 'Nov 2017 — Dec 2021',
+        'exp.ab.date': 'Nov 2017 — Sep 2022',
         'exp.ab.d1': 'Project leader with experience in managing and delivering complex solutions.',
         'exp.ab.d2': 'Complete development of sisenior.cl using PHP, WordPress, and MySQL.',
         'exp.ab.d3': 'Collections software project using .NET ASP and SQL Server.',
