@@ -447,4 +447,302 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!localStorage.getItem('preferred-theme')) setTheme(e.matches ? 'light' : 'dark');
     });
 
+    // ================================================
+    // 17. PDF CV DOWNLOAD
+    // ================================================
+    initPdfDownload();
+
 });
+
+
+/* ===========================
+   PDF CV Generation (pdfmake)
+   =========================== */
+
+const CV_SKILLS = {
+    backend:   { items: [{n:'.NET ASP / C#',v:90},{n:'Java / Spring Boot',v:82},{n:'PHP / Laravel',v:80},{n:'Node.js',v:75},{n:'WordPress / CMS',v:75}] },
+    frontend:  { items: [{n:'JavaScript / TypeScript',v:88},{n:'React',v:85},{n:'Vue.js',v:83},{n:'Bootstrap / CSS',v:80}] },
+    databases: { items: [{n:'SQL Server',v:92},{n:'MySQL',v:85},{n:'Oracle / PL-SQL',v:78}] },
+    devops:    { items: [{n:'Git / Azure DevOps',v:88},{n:'Jira / Scrum',v:85},{n:'Cypress / Testing',v:82},{n:'Docker / CI-CD',v:75},{n:'Bash / Unix',v:72}] },
+    ai:        { items: [{n:'AI Agents / Cursor',v:88},{n:'Claude / LLM APIs',v:85},{n:'Prompt Engineering',v:82},{n:'GitHub Copilot',v:80}] }
+};
+
+const CV_EXP = [
+    { key:'sonda',  company:'Sonda',            location:'Santiago, Chile',    tags:['Vue.js','Spring Boot 3','.NET Core 7','React','SQL Server','PHP','WordPress'], bullets:5 },
+    { key:'rda',    company:'RDA Corporation',   location:'Remote (US)',         tags:['Cypress','TypeScript','Azure DevOps','CI/CD'],                               bullets:4 },
+    { key:'ab',     company:'A&B Solutions Pro', location:'Santiago, Chile',    tags:['PHP','Laravel','.NET ASP','WordPress','MySQL','SQL Server'],                  bullets:4 },
+    { key:'vmica',  company:'VMICA',             location:'Providencia, Chile', tags:['.NET ASP/C#','PL/SQL','Java','Oracle','SQL Server','Bash'],                   bullets:4 },
+    { key:'retail', company:'Retail Services',   location:'Providencia, Chile', tags:['.NET','SQL Server','FoxPro','DTE'],                                           bullets:5 },
+    { key:'cst',    company:'CST Solutions',     location:'Nuñoa, Chile',       tags:['.NET Mobile','SQL Server CE'],                                                bullets:3 }
+];
+
+const CV_CERTS = [
+    { name:'Java',                          hours:'135.5h', keyDate:'certs.java.date' },
+    { name:'Data Engineering (SQL/PySpark)', hours:'56h',   keyDate:'certs.dataeng.date' },
+    { name:'Node.js',                        hours:'42.5h', keyDate:'certs.nodejs.date' },
+    { name:'Spring Framework 6 / Boot 3',    hours:'40.5h', keyDate:'certs.spring.date' },
+    { name:'Bootstrap',                      hours:'21.5h', keyDate:'certs.bootstrap.date' },
+    { name:'ASP.Net Core 8',                 hours:'18h',   keyDate:'certs.aspnet.date' },
+    { name:'Docker',                         hours:'12.5h', keyDate:'certs.docker.date' },
+    { name:'Oracle BPM 12c',                 hours:'5h',    keyDate:'certs.oracle.date' }
+];
+
+function loadPdfMake() {
+    if (window.pdfMake) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+        const s1 = document.createElement('script');
+        s1.src = 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js';
+        s1.onload = () => {
+            const s2 = document.createElement('script');
+            s2.src = 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js';
+            s2.onload = resolve;
+            s2.onerror = reject;
+            document.head.appendChild(s2);
+        };
+        s1.onerror = reject;
+        document.head.appendChild(s1);
+    });
+}
+
+function buildCvDoc(lang) {
+    const t = translations[lang];
+    const ACCENT = '#6c63ff';
+    const DARK   = '#1a1a2e';
+    const BODY   = '#333333';
+    const MUTED  = '#555555';
+    const LGRAY  = '#e0e0e0';
+    const ROALT  = '#f5f5ff';
+
+    function sectionTitle(text) {
+        return { text: text.toUpperCase(), fontSize: 10, bold: true, color: ACCENT, margin: [0, 14, 0, 5] };
+    }
+
+    function hrLine() {
+        return { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 0.5, color: LGRAY }], margin: [0, 0, 0, 8] };
+    }
+
+    function skillBar(name, pct) {
+        const fw = +(pct * 0.62).toFixed(1);
+        const ew = +((100 - pct) * 0.62).toFixed(1);
+        return {
+            columns: [
+                { text: name, width: 108, fontSize: 8, color: BODY },
+                { text: pct + '%', width: 26, fontSize: 8, color: ACCENT, bold: true, alignment: 'right' },
+                { canvas: [
+                    { type: 'rect', x: 0, y: 4, w: Math.max(fw, 1), h: 5, r: 2, color: ACCENT },
+                    { type: 'rect', x: fw + 1, y: 4, w: Math.max(ew, 1), h: 5, r: 2, color: LGRAY }
+                ], width: 68 }
+            ],
+            margin: [0, 2, 0, 2]
+        };
+    }
+
+    function langBar(label, sublabel, pct) {
+        const fw = +(pct * 0.95).toFixed(1);
+        const ew = +((100 - pct) * 0.95).toFixed(1);
+        return {
+            columns: [
+                { text: label, width: 52, fontSize: 8, color: BODY },
+                { text: sublabel, width: 72, fontSize: 8, color: MUTED },
+                { canvas: [
+                    { type: 'rect', x: 0, y: 4, w: Math.max(fw, 1), h: 5, r: 2, color: ACCENT },
+                    { type: 'rect', x: fw + 1, y: 4, w: Math.max(ew, 0.5), h: 5, r: 2, color: LGRAY }
+                ], width: 98 }
+            ],
+            margin: [0, 2, 0, 2]
+        };
+    }
+
+    // --- Header ---
+    const headerBlock = [
+        { text: 'Claudio Meneses Donoso', fontSize: 22, bold: true, color: ACCENT },
+        { text: t['exp.sonda.role'], fontSize: 12, color: ACCENT, margin: [0, 3, 0, 0] },
+        { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 2, color: ACCENT }], margin: [0, 8, 0, 6] },
+        {
+            text: [
+                { text: 'cmenesesd@gmail.com', color: ACCENT },
+                { text: '   |   ', color: MUTED },
+                { text: 'linkedin.com/in/claudio-meneses', color: ACCENT },
+                { text: '   |   ', color: MUTED },
+                { text: 'github.com/claudioko', color: ACCENT },
+                { text: '   |   ', color: MUTED },
+                { text: 'Nuñoa, Santiago, Chile', color: BODY }
+            ],
+            fontSize: 8.5,
+            margin: [0, 0, 0, 4]
+        }
+    ];
+
+    // --- Experience ---
+    const expContent = [];
+    for (const exp of CV_EXP) {
+        const role = t[`exp.${exp.key}.role`] || '';
+        const date = t[`exp.${exp.key}.date`] || '';
+        const bullets = [];
+        for (let i = 1; i <= exp.bullets; i++) {
+            const v = t[`exp.${exp.key}.d${i}`];
+            if (v) bullets.push(v);
+        }
+        const tagParts = [];
+        exp.tags.forEach((tag, i) => {
+            tagParts.push({ text: tag, color: ACCENT, fontSize: 7.5, background: '#ede9ff' });
+            if (i < exp.tags.length - 1) tagParts.push({ text: '  ', fontSize: 7.5 });
+        });
+
+        expContent.push({
+            stack: [
+                {
+                    columns: [
+                        { text: `${exp.company}  ·  ${exp.location}`, bold: true, fontSize: 9.5, color: DARK, width: '*' },
+                        { text: date, fontSize: 8.5, color: MUTED, alignment: 'right', width: 'auto' }
+                    ],
+                    margin: [0, 0, 0, 1]
+                },
+                { text: role, italics: true, fontSize: 9, color: MUTED, margin: [0, 0, 0, 3] },
+                { ul: bullets, fontSize: 8.5, color: BODY, margin: [0, 0, 0, 4] },
+                { text: tagParts, margin: [0, 0, 0, 0] }
+            ],
+            margin: [0, 0, 0, 10]
+        });
+    }
+
+    // --- Skills ---
+    const leftSkills = [
+        { text: 'Backend', bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 3] },
+        ...CV_SKILLS.backend.items.map(s => skillBar(s.n, s.v)),
+        { text: 'Frontend', bold: true, fontSize: 9, color: DARK, margin: [0, 7, 0, 3] },
+        ...CV_SKILLS.frontend.items.map(s => skillBar(s.n, s.v))
+    ];
+    const rightSkills = [
+        { text: lang === 'es' ? 'Bases de Datos' : 'Databases', bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 3] },
+        ...CV_SKILLS.databases.items.map(s => skillBar(s.n, s.v)),
+        { text: 'DevOps & QA', bold: true, fontSize: 9, color: DARK, margin: [0, 7, 0, 3] },
+        ...CV_SKILLS.devops.items.map(s => skillBar(s.n, s.v)),
+        { text: 'AI Tools', bold: true, fontSize: 9, color: DARK, margin: [0, 7, 0, 3] },
+        ...CV_SKILLS.ai.items.map(s => skillBar(s.n, s.v))
+    ];
+    const skillsBlock = {
+        columns: [
+            { stack: leftSkills, width: '50%' },
+            { stack: rightSkills, width: '50%' }
+        ],
+        columnGap: 20,
+        margin: [0, 0, 0, 6]
+    };
+
+    // --- Education & Languages ---
+    const eduLangBlock = {
+        columns: [
+            {
+                width: '50%',
+                stack: [
+                    { text: (lang === 'es' ? 'Educación' : 'Education').toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
+                    { text: t['edu.degree'], bold: true, fontSize: 9, color: DARK },
+                    { text: 'Universidad De Los Lagos', fontSize: 8.5, color: BODY },
+                    { text: t['edu.date'], fontSize: 8, color: MUTED, margin: [0, 1, 0, 0] }
+                ]
+            },
+            {
+                width: '50%',
+                stack: [
+                    { text: (lang === 'es' ? 'Idiomas' : 'Languages').toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
+                    langBar(t['edu.spanish'], t['edu.native'], 100),
+                    langBar(t['edu.english'], t['edu.advanced'], 85)
+                ]
+            }
+        ],
+        columnGap: 20,
+        margin: [0, 0, 0, 6]
+    };
+
+    // --- Certifications ---
+    const certHeader = [
+        { text: lang === 'es' ? 'Curso' : 'Course', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK },
+        { text: lang === 'es' ? 'Horas' : 'Hours', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK, alignment: 'center' },
+        { text: lang === 'es' ? 'Institución / Fecha' : 'Institution / Date', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK }
+    ];
+    const certRows = CV_CERTS.map((cert, i) => [
+        { text: cert.name, fontSize: 8, color: BODY, fillColor: i % 2 === 0 ? '#ffffff' : ROALT },
+        { text: cert.hours, fontSize: 8, color: ACCENT, alignment: 'center', fillColor: i % 2 === 0 ? '#ffffff' : ROALT },
+        { text: t[cert.keyDate] || '', fontSize: 8, color: MUTED, fillColor: i % 2 === 0 ? '#ffffff' : ROALT }
+    ]);
+    const certsBlock = {
+        table: {
+            headerRows: 1,
+            widths: ['*', 55, 150],
+            body: [certHeader, ...certRows]
+        },
+        layout: {
+            hLineWidth: () => 0.5,
+            vLineWidth: () => 0,
+            hLineColor: () => '#dddddd'
+        },
+        margin: [0, 0, 0, 6]
+    };
+
+    // --- References ---
+    const refsBlock = {
+        columns: [
+            { stack: [
+                { text: 'Jorge Carabajal', bold: true, fontSize: 9, color: DARK },
+                { text: 'Forte Group', fontSize: 8.5, color: MUTED },
+                { text: 'jcarabajal1989@gmail.com', fontSize: 8, color: ACCENT }
+            ], width: '*' },
+            { stack: [
+                { text: 'Ivan Arancibia', bold: true, fontSize: 9, color: DARK },
+                { text: 'VMICA', fontSize: 8.5, color: MUTED },
+                { text: 'Ivan.Arancibia.S@gmail.com', fontSize: 8, color: ACCENT }
+            ], width: '*' },
+            { stack: [
+                { text: 'Rodrigo Campos', bold: true, fontSize: 9, color: DARK },
+                { text: 'VMICA', fontSize: 8.5, color: MUTED },
+                { text: 'camposmatus@gmail.com', fontSize: 8, color: ACCENT }
+            ], width: '*' }
+        ],
+        columnGap: 10
+    };
+
+    return {
+        pageSize: 'A4',
+        pageMargins: [40, 50, 40, 45],
+        defaultStyle: { font: 'Roboto', color: BODY, fontSize: 9 },
+        content: [
+            ...headerBlock,
+            sectionTitle(lang === 'es' ? 'Experiencia Profesional' : 'Professional Experience'),
+            ...expContent,
+            sectionTitle(lang === 'es' ? 'Habilidades Técnicas' : 'Technical Skills'),
+            skillsBlock,
+            hrLine(),
+            eduLangBlock,
+            sectionTitle(lang === 'es' ? 'Formación Adicional' : 'Additional Training'),
+            certsBlock,
+            sectionTitle(lang === 'es' ? 'Referencias Profesionales' : 'Professional References'),
+            refsBlock
+        ]
+    };
+}
+
+function initPdfDownload() {
+    const btn = document.getElementById('downloadCV');
+    if (!btn) return;
+    btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const span = btn.querySelector('[data-i18n]');
+        const originalText = span ? span.textContent : '';
+        if (btn.dataset.generating) return;
+        btn.dataset.generating = '1';
+        if (span) span.textContent = currentLang === 'es' ? 'Generando PDF...' : 'Generating PDF...';
+        try {
+            await loadPdfMake();
+            const doc = buildCvDoc(currentLang);
+            const fname = currentLang === 'es' ? 'Claudio-Meneses-CV-ES.pdf' : 'Claudio-Meneses-CV-EN.pdf';
+            pdfMake.createPdf(doc).download(fname);
+        } catch (err) {
+            console.error('PDF generation error:', err);
+            window.open(CV_URLS[currentLang], '_blank');
+        } finally {
+            delete btn.dataset.generating;
+            if (span) span.textContent = originalText;
+        }
+    });
+}
