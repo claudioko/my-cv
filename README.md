@@ -1,6 +1,6 @@
 # 👨‍💻 Claudio Meneses Donoso — CV Web
 
-> Personal CV website built with vanilla HTML, CSS and JavaScript. Features modern design with dark/light mode, bilingual support (ES/EN), and interactive animations.
+> Personal CV website built with vanilla HTML, CSS and JavaScript. Features modern design with dark/light mode, bilingual support (ES/EN), interactive animations, and client-side PDF generation.
 
 **🔗 Live:** [claudioko.github.io/my-cv](https://claudioko.github.io/my-cv)
 
@@ -16,6 +16,7 @@
 - 📈 **Skill progress bars** — animated on viewport entry
 - 🖱️ **Custom cursor** — desktop-only magnetic effect
 - 🃏 **Tilt effect on cards** — 3D hover on skill and cert cards
+- 📄 **PDF CV download** — generates a professional, ATS-friendly PDF on the fly via pdfmake (vector text, selectable, bilingual)
 - 📱 **Fully responsive** — mobile-first, hamburger nav from 768px
 - ♿ **Accessible** — semantic HTML5, ARIA labels, keyboard navigation
 
@@ -25,11 +26,10 @@
 
 ```
 my-cv/
-├── index.html      # Main HTML — all sections
+├── index.html      # Main HTML — all sections and content
 ├── styles.css      # All styles & responsive media queries
-├── script.js       # Animations, interactions & behaviour
-├── i18n.js         # Translation strings (ES / EN)
-└── resume.pdf      # Source resume (not served publicly)
+├── script.js       # Animations, interactions, PDF generation
+└── i18n.js         # Translation strings (ES / EN) + CV_URLS
 ```
 
 ---
@@ -69,6 +69,7 @@ python3 -m http.server 8080
 | Markup | HTML5, Semantic elements |
 | Styling | Vanilla CSS, CSS custom properties, Flexbox, Grid |
 | Scripting | Vanilla JavaScript (ES2020+) |
+| PDF generation | [pdfmake](https://pdfmake.github.io/docs/) 0.2.10 (lazy-loaded via jsDelivr CDN) |
 | Fonts | Inter + Space Grotesk (Google Fonts) |
 | Icons | Inline SVG |
 | i18n | Custom JS i18n module |
