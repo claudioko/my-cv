@@ -1,0 +1,15 @@
+{
+  "name": "Claudio Meneses Donoso — Full Stack Developer",
+  "short_name": "Claudio CV",
+  "description": "CV of Claudio Meneses Donoso, Full Stack Developer with 14+ years of experience in .NET, Java, React, Vue.js and Node.js.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

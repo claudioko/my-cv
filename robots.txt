@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://claudioko.github.io/my-cv/sitemap.xml
