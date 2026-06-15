@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let particles = [];
         let animFrame;
         const mouse = { x: null, y: null, radius: 120 };
+        // Read accent color from CSS so the canvas matches the active theme
+        const particleRGB = getComputedStyle(document.documentElement)
+            .getPropertyValue('--accent-rgb').trim() || '108, 99, 255';
 
         function resizeCanvas() {
             canvas.width = canvas.offsetWidth;
@@ -79,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(108, 99, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(${particleRGB}, ${this.opacity})`;
                 ctx.fill();
             }
         }
@@ -103,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(108, 99, 255, ${alpha})`;
+                        ctx.strokeStyle = `rgba(${particleRGB}, ${alpha})`;
                         ctx.lineWidth = 0.5;
                         ctx.stroke();
                     }
@@ -111,13 +114,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        let running = false;
         function animateParticles() {
+            if (!running) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
             connectParticles();
             animFrame = requestAnimationFrame(animateParticles);
         }
-        animateParticles();
+        function startParticles() {
+            if (running) return;
+            running = true;
+            animFrame = requestAnimationFrame(animateParticles);
+        }
+        function stopParticles() {
+            running = false;
+            if (animFrame) cancelAnimationFrame(animFrame);
+        }
+
+        // Only animate while the hero canvas is visible and the tab is focused
+        let canvasInView = false;
+        function syncParticles() {
+            if (canvasInView && !document.hidden) startParticles();
+            else stopParticles();
+        }
+        new IntersectionObserver((entries) => {
+            canvasInView = entries[0].isIntersecting;
+            syncParticles();
+        }, { threshold: 0 }).observe(canvas);
+        document.addEventListener('visibilitychange', syncParticles);
+        syncParticles();
+
         window.addEventListener('resize', initParticles, { passive: true });
     }
 
@@ -289,16 +316,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
 
+    function setMenuOpen(open) {
+        navToggle.classList.toggle('active', open);
+        navMenu.classList.toggle('active', open);
+        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-controls', 'navMenu');
+
     navToggle.addEventListener('click', () => {
-        navToggle.classList.toggle('active');
-        navMenu.classList.toggle('active');
+        setMenuOpen(!navMenu.classList.contains('active'));
     });
 
     document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            navToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-        });
+        link.addEventListener('click', () => setMenuOpen(false));
+    });
+
+    // Close the mobile menu on Escape (restoring focus) or an outside click
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+            setMenuOpen(false);
+            navToggle.focus();
+        }
+    });
+    document.addEventListener('click', (e) => {
+        if (navMenu.classList.contains('active') &&
+            !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+            setMenuOpen(false);
+        }
     });
 
 
