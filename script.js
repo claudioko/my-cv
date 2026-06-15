@@ -521,33 +521,67 @@ document.addEventListener('DOMContentLoaded', () => {
    PDF CV Generation (pdfmake)
    =========================== */
 
-const CV_SKILLS = {
-    backend:   { items: [{n:'.NET ASP / C#',v:90},{n:'Java / Spring Boot',v:82},{n:'PHP / Laravel',v:80},{n:'Node.js',v:75},{n:'WordPress / CMS',v:75}] },
-    frontend:  { items: [{n:'JavaScript / TypeScript',v:88},{n:'React',v:85},{n:'Vue.js',v:83},{n:'Bootstrap / CSS',v:80}] },
-    databases: { items: [{n:'SQL Server',v:92},{n:'MySQL',v:85},{n:'Oracle / PL-SQL',v:78}] },
-    devops:    { items: [{n:'Git / Azure DevOps',v:88},{n:'Jira / Scrum',v:85},{n:'Cypress / Testing',v:82},{n:'Docker / CI-CD',v:75},{n:'Bash / Unix',v:72}] },
-    ai:        { items: [{n:'AI Agents / Cursor',v:88},{n:'Claude / LLM APIs',v:85},{n:'Prompt Engineering',v:82},{n:'GitHub Copilot',v:80}] }
-};
+/* DOM readers — the rendered page is the single source of truth, so the PDF
+   can never drift from it and always matches the displayed language. */
 
-const CV_EXP = [
-    { key:'sonda',  company:'Sonda',            location:'Santiago, Chile',    tags:['Vue.js','Spring Boot 3','.NET Core 7','React','SQL Server','PHP','WordPress'], bullets:5 },
-    { key:'rda',    company:'RDA Corporation',   location:'Remote (US)',         tags:['Cypress','TypeScript','Azure DevOps','CI/CD'],                               bullets:4 },
-    { key:'ab',     company:'A&B Solutions Pro', location:'Santiago, Chile',    tags:['PHP','Laravel','.NET ASP','WordPress','MySQL','SQL Server'],                  bullets:4 },
-    { key:'vmica',  company:'VMICA',             location:'Providencia, Chile', tags:['.NET ASP/C#','PL/SQL','Java','Oracle','SQL Server','Bash'],                   bullets:4 },
-    { key:'retail', company:'Retail Services',   location:'Providencia, Chile', tags:['.NET','SQL Server','FoxPro','DTE'],                                           bullets:5 },
-    { key:'cst',    company:'CST Solutions',     location:'Nuñoa, Chile',       tags:['.NET Mobile','SQL Server CE'],                                                bullets:3 }
-];
+function pdfText(el) {
+    return el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
+}
 
-const CV_CERTS = [
-    { name:'Java',                          hours:'135.5h', keyDate:'certs.java.date' },
-    { name:'Data Engineering (SQL/PySpark)', hours:'56h',   keyDate:'certs.dataeng.date' },
-    { name:'Node.js',                        hours:'42.5h', keyDate:'certs.nodejs.date' },
-    { name:'Spring Framework 6 / Boot 3',    hours:'40.5h', keyDate:'certs.spring.date' },
-    { name:'Bootstrap',                      hours:'21.5h', keyDate:'certs.bootstrap.date' },
-    { name:'ASP.Net Core 8',                 hours:'18h',   keyDate:'certs.aspnet.date' },
-    { name:'Docker',                         hours:'12.5h', keyDate:'certs.docker.date' },
-    { name:'Oracle BPM 12c',                 hours:'5h',    keyDate:'certs.oracle.date' }
-];
+function readExperience() {
+    return [...document.querySelectorAll('#experience .timeline-item')].map(item => ({
+        companyLine: pdfText(item.querySelector('.timeline-company')),
+        role:        pdfText(item.querySelector('.timeline-role')),
+        date:        pdfText(item.querySelector('.timeline-date')),
+        bullets:     [...item.querySelectorAll('.timeline-details li')].map(pdfText),
+        tags:        [...item.querySelectorAll('.timeline-tags .tag')].map(pdfText)
+    }));
+}
+
+function readSkillGroups() {
+    return [...document.querySelectorAll('#skills .skill-category')].map(cat => ({
+        title: pdfText(cat.querySelector('.skill-category-header h3')),
+        items: [...cat.querySelectorAll('.skill-item')].map(it => ({
+            n: pdfText(it.querySelector('.skill-name')),
+            v: parseInt(it.querySelector('.skill-bar-fill').getAttribute('data-width'), 10) || 0
+        }))
+    }));
+}
+
+function readEducation() {
+    const cards = [...document.querySelectorAll('#education .education-card')];
+    const degreeCard = cards.find(c => c.querySelector('.education-school'));
+    return {
+        degree: pdfText(degreeCard && degreeCard.querySelector('h3')),
+        school: pdfText(degreeCard && degreeCard.querySelector('.education-school')),
+        date:   pdfText(degreeCard && degreeCard.querySelector('.education-date')),
+        languages: [...document.querySelectorAll('#education .language-item')].map(li => ({
+            label:    pdfText(li.querySelector('.language-info span')),
+            sublabel: pdfText(li.querySelector('.language-level')),
+            pct:      parseFloat(li.querySelector('.language-fill').style.width) || 0
+        }))
+    };
+}
+
+function readCerts() {
+    return [...document.querySelectorAll('#certifications .cert-card')].map(card => {
+        const name = pdfText(card.querySelector('h3'));
+        const subtitle = pdfText(card.querySelector('p:not([data-i18n])'));
+        return {
+            name:  subtitle ? `${name} (${subtitle})` : name,
+            hours: pdfText(card.querySelector('.cert-hours')),
+            date:  pdfText(card.querySelector('p[data-i18n]'))
+        };
+    });
+}
+
+function readReferences() {
+    return [...document.querySelectorAll('#references .reference-card')].map(card => ({
+        name:    pdfText(card.querySelector('h3')),
+        company: pdfText(card.querySelector('.reference-company')),
+        email:   pdfText(card.querySelector('.reference-contact a'))
+    }));
+}
 
 function loadPdfMake() {
     if (window.pdfMake) return Promise.resolve();
@@ -570,14 +604,24 @@ function loadPdfMake() {
     });
 }
 
-function buildCvDoc(lang) {
-    const t = translations[lang];
+function buildCvDoc() {
+    const lang   = currentLang;
     const ACCENT = '#6c63ff';
     const DARK   = '#1a1a2e';
     const BODY   = '#333333';
     const MUTED  = '#555555';
     const LGRAY  = '#e0e0e0';
     const ROALT  = '#f5f5ff';
+
+    const exp         = readExperience();
+    const skillGroups = readSkillGroups();
+    const edu         = readEducation();
+    const certs       = readCerts();
+    const refs        = readReferences();
+
+    function sectionTitleText(id) {
+        return pdfText(document.querySelector(`#${id} .section-title`));
+    }
 
     function sectionTitle(text) {
         return { text: text.toUpperCase(), fontSize: 10, bold: true, color: ACCENT, margin: [0, 14, 0, 5] };
@@ -619,10 +663,10 @@ function buildCvDoc(lang) {
         };
     }
 
-    // --- Header ---
+    // --- Header (name/contact are static; the role tracks the current position) ---
     const headerBlock = [
         { text: 'Claudio Meneses Donoso', fontSize: 22, bold: true, color: ACCENT },
-        { text: t['exp.sonda.role'], fontSize: 12, color: ACCENT, margin: [0, 3, 0, 0] },
+        { text: exp.length ? exp[0].role : '', fontSize: 12, color: ACCENT, margin: [0, 3, 0, 0] },
         { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 2, color: ACCENT }], margin: [0, 8, 0, 6] },
         {
             text: [
@@ -640,53 +684,37 @@ function buildCvDoc(lang) {
     ];
 
     // --- Experience ---
-    const expContent = [];
-    for (const exp of CV_EXP) {
-        const role = t[`exp.${exp.key}.role`] || '';
-        const date = t[`exp.${exp.key}.date`] || '';
-        const bullets = [];
-        for (let i = 1; i <= exp.bullets; i++) {
-            const v = t[`exp.${exp.key}.d${i}`];
-            if (v) bullets.push(v);
-        }
+    const expContent = exp.map(e => {
         const tagParts = [];
-        exp.tags.forEach((tag, i) => {
+        e.tags.forEach((tag, i) => {
             tagParts.push({ text: tag, color: ACCENT, fontSize: 7.5, background: '#ede9ff' });
-            if (i < exp.tags.length - 1) tagParts.push({ text: '  ', fontSize: 7.5 });
+            if (i < e.tags.length - 1) tagParts.push({ text: '  ', fontSize: 7.5 });
         });
-
-        expContent.push({
+        return {
             stack: [
                 {
                     columns: [
-                        { text: `${exp.company}  ·  ${exp.location}`, bold: true, fontSize: 9.5, color: DARK, width: '*' },
-                        { text: date, fontSize: 8.5, color: MUTED, alignment: 'right', width: 'auto' }
+                        { text: e.companyLine, bold: true, fontSize: 9.5, color: DARK, width: '*' },
+                        { text: e.date, fontSize: 8.5, color: MUTED, alignment: 'right', width: 'auto' }
                     ],
                     margin: [0, 0, 0, 1]
                 },
-                { text: role, italics: true, fontSize: 9, color: MUTED, margin: [0, 0, 0, 3] },
-                { ul: bullets, fontSize: 8.5, color: BODY, margin: [0, 0, 0, 4] },
+                { text: e.role, italics: true, fontSize: 9, color: MUTED, margin: [0, 0, 0, 3] },
+                { ul: e.bullets, fontSize: 8.5, color: BODY, margin: [0, 0, 0, 4] },
                 { text: tagParts, margin: [0, 0, 0, 0] }
             ],
             margin: [0, 0, 0, 10]
-        });
-    }
+        };
+    });
 
-    // --- Skills ---
-    const leftSkills = [
-        { text: 'Backend', bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 3] },
-        ...CV_SKILLS.backend.items.map(s => skillBar(s.n, s.v)),
-        { text: 'Frontend', bold: true, fontSize: 9, color: DARK, margin: [0, 7, 0, 3] },
-        ...CV_SKILLS.frontend.items.map(s => skillBar(s.n, s.v))
-    ];
-    const rightSkills = [
-        { text: lang === 'es' ? 'Bases de Datos' : 'Databases', bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 3] },
-        ...CV_SKILLS.databases.items.map(s => skillBar(s.n, s.v)),
-        { text: 'DevOps & QA', bold: true, fontSize: 9, color: DARK, margin: [0, 7, 0, 3] },
-        ...CV_SKILLS.devops.items.map(s => skillBar(s.n, s.v)),
-        { text: 'AI Tools', bold: true, fontSize: 9, color: DARK, margin: [0, 7, 0, 3] },
-        ...CV_SKILLS.ai.items.map(s => skillBar(s.n, s.v))
-    ];
+    // --- Skills (first two groups left, the rest right — mirrors the page layout) ---
+    const leftSkills = [];
+    const rightSkills = [];
+    skillGroups.forEach((g, idx) => {
+        const target = idx < 2 ? leftSkills : rightSkills;
+        target.push({ text: g.title, bold: true, fontSize: 9, color: DARK, margin: [0, target.length ? 7 : 0, 0, 3] });
+        g.items.forEach(s => target.push(skillBar(s.n, s.v)));
+    });
     const skillsBlock = {
         columns: [
             { stack: leftSkills, width: '50%' },
@@ -703,17 +731,16 @@ function buildCvDoc(lang) {
                 width: '50%',
                 stack: [
                     { text: (lang === 'es' ? 'Educación' : 'Education').toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
-                    { text: t['edu.degree'], bold: true, fontSize: 9, color: DARK },
-                    { text: 'Universidad De Los Lagos', fontSize: 8.5, color: BODY },
-                    { text: t['edu.date'], fontSize: 8, color: MUTED, margin: [0, 1, 0, 0] }
+                    { text: edu.degree, bold: true, fontSize: 9, color: DARK },
+                    { text: edu.school, fontSize: 8.5, color: BODY },
+                    { text: edu.date, fontSize: 8, color: MUTED, margin: [0, 1, 0, 0] }
                 ]
             },
             {
                 width: '50%',
                 stack: [
                     { text: (lang === 'es' ? 'Idiomas' : 'Languages').toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
-                    langBar(t['edu.spanish'], t['edu.native'], 100),
-                    langBar(t['edu.english'], t['edu.advanced'], 85)
+                    ...edu.languages.map(l => langBar(l.label, l.sublabel, l.pct))
                 ]
             }
         ],
@@ -727,10 +754,10 @@ function buildCvDoc(lang) {
         { text: lang === 'es' ? 'Horas' : 'Hours', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK, alignment: 'center' },
         { text: lang === 'es' ? 'Institución / Fecha' : 'Institution / Date', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK }
     ];
-    const certRows = CV_CERTS.map((cert, i) => [
+    const certRows = certs.map((cert, i) => [
         { text: cert.name, fontSize: 8, color: BODY, fillColor: i % 2 === 0 ? '#ffffff' : ROALT },
         { text: cert.hours, fontSize: 8, color: ACCENT, alignment: 'center', fillColor: i % 2 === 0 ? '#ffffff' : ROALT },
-        { text: t[cert.keyDate] || '', fontSize: 8, color: MUTED, fillColor: i % 2 === 0 ? '#ffffff' : ROALT }
+        { text: cert.date, fontSize: 8, color: MUTED, fillColor: i % 2 === 0 ? '#ffffff' : ROALT }
     ]);
     const certsBlock = {
         table: {
@@ -747,26 +774,17 @@ function buildCvDoc(lang) {
     };
 
     // --- References ---
-    const refsBlock = {
-        columns: [
-            { stack: [
-                { text: 'Jorge Carabajal', bold: true, fontSize: 9, color: DARK },
-                { text: 'Forte Group', fontSize: 8.5, color: MUTED },
-                { text: 'jcarabajal1989@gmail.com', fontSize: 8, color: ACCENT }
-            ], width: '*' },
-            { stack: [
-                { text: 'Ivan Arancibia', bold: true, fontSize: 9, color: DARK },
-                { text: 'VMICA', fontSize: 8.5, color: MUTED },
-                { text: 'Ivan.Arancibia.S@gmail.com', fontSize: 8, color: ACCENT }
-            ], width: '*' },
-            { stack: [
-                { text: 'Rodrigo Campos', bold: true, fontSize: 9, color: DARK },
-                { text: 'VMICA', fontSize: 8.5, color: MUTED },
-                { text: 'camposmatus@gmail.com', fontSize: 8, color: ACCENT }
-            ], width: '*' }
-        ],
+    const refsBlock = refs.length ? {
+        columns: refs.map(r => ({
+            width: '*',
+            stack: [
+                { text: r.name, bold: true, fontSize: 9, color: DARK },
+                { text: r.company, fontSize: 8.5, color: MUTED },
+                { text: r.email, fontSize: 8, color: ACCENT }
+            ]
+        })),
         columnGap: 10
-    };
+    } : { text: '' };
 
     return {
         pageSize: 'A4',
@@ -774,15 +792,15 @@ function buildCvDoc(lang) {
         defaultStyle: { font: 'Roboto', color: BODY, fontSize: 9 },
         content: [
             ...headerBlock,
-            sectionTitle(lang === 'es' ? 'Experiencia Profesional' : 'Professional Experience'),
+            sectionTitle(sectionTitleText('experience')),
             ...expContent,
-            sectionTitle(lang === 'es' ? 'Habilidades Técnicas' : 'Technical Skills'),
+            sectionTitle(sectionTitleText('skills')),
             skillsBlock,
             hrLine(),
             eduLangBlock,
-            sectionTitle(lang === 'es' ? 'Formación Adicional' : 'Additional Training'),
+            sectionTitle(sectionTitleText('certifications')),
             certsBlock,
-            sectionTitle(lang === 'es' ? 'Referencias Profesionales' : 'Professional References'),
+            sectionTitle(sectionTitleText('references')),
             refsBlock
         ]
     };
@@ -800,7 +818,7 @@ function initPdfDownload() {
         if (span) span.textContent = currentLang === 'es' ? 'Generando PDF...' : 'Generating PDF...';
         try {
             await loadPdfMake();
-            const doc = buildCvDoc(currentLang);
+            const doc = buildCvDoc();
             const fname = currentLang === 'es' ? 'Claudio-Meneses-CV-ES.pdf' : 'Claudio-Meneses-CV-EN.pdf';
             pdfMake.createPdf(doc).download(fname);
         } catch (err) {
