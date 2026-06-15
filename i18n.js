@@ -12,6 +12,10 @@ const translations = {
         'nav.courses': 'Cursos',
         'nav.contact': 'Contacto',
 
+        // Accessibility / Meta
+        'a11y.skip': 'Saltar al contenido',
+        'doc.title': 'Claudio Meneses Donoso — Desarrollador Full Stack',
+
         // Hero
         'hero.greeting': 'Hola, soy',
         'hero.title': 'Desarrollador Full Stack',
@@ -128,6 +132,10 @@ const translations = {
         'nav.education': 'Education',
         'nav.courses': 'Courses',
         'nav.contact': 'Contact',
+
+        // Accessibility / Meta
+        'a11y.skip': 'Skip to content',
+        'doc.title': 'Claudio Meneses Donoso — Full Stack Developer',
 
         // Hero
         'hero.greeting': 'Hi, I\'m',
@@ -274,9 +282,14 @@ function setLanguage(lang) {
     // Update html lang attribute
     document.documentElement.lang = lang;
 
+    // Update document title for the active language
+    if (t['doc.title']) document.title = t['doc.title'];
+
     // Update toggle button active state
     document.querySelectorAll('.lang-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.lang === lang);
+        const isActive = opt.dataset.lang === lang;
+        opt.classList.toggle('active', isActive);
+        opt.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     // Store preference

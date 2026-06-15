@@ -4,6 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Respect users who prefer reduced motion (accessibility / battery)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // ================================================
     // 1. SCROLL PROGRESS BAR
     // ================================================
@@ -19,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. PARTICLE CANVAS BACKGROUND (Hero)
     // ================================================
     const canvas = document.getElementById('particleCanvas');
-    if (canvas) {
+    if (canvas && !prefersReducedMotion) {
         const ctx = canvas.getContext('2d');
         let particles = [];
         let animFrame;
@@ -123,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. TYPING ANIMATION (Hero Title)
     // ================================================
     const typingEl = document.getElementById('typingText');
-    if (typingEl) {
+    if (typingEl && !prefersReducedMotion) {
         const phrases = [
             'Full Stack Developer',
             'Desarrollador Full Stack',
@@ -184,16 +187,23 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(update);
     }
 
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                counterObserver.unobserve(entry.target);
-            }
+    if (prefersReducedMotion) {
+        // Show final values instantly — no count-up animation
+        statNumbers.forEach(el => {
+            el.textContent = el.getAttribute('data-target') + (el.getAttribute('data-suffix') || '');
         });
-    }, { threshold: 0.5 });
+    } else {
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
 
-    statNumbers.forEach(el => counterObserver.observe(el));
+        statNumbers.forEach(el => counterObserver.observe(el));
+    }
 
 
     // ================================================
@@ -204,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
     let ringActive = false;
 
-    if (cursorDot && cursorRing && window.matchMedia('(pointer: fine)').matches) {
+    if (cursorDot && cursorRing && !prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
         document.body.classList.add('custom-cursor');
 
         document.addEventListener('mousemove', (e) => {
@@ -299,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.addEventListener('click', (e) => {
             e.preventDefault();
             const target = document.querySelector(anchor.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth' });
+            if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         });
     });
 
@@ -353,14 +363,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     const orbs = document.querySelectorAll('.hero-orb');
 
-    window.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 2;
-        const y = (e.clientY / window.innerHeight - 0.5) * 2;
-        orbs.forEach((orb, i) => {
-            const speed = (i + 1) * 12;
-            orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
-        });
-    }, { passive: true });
+    if (!prefersReducedMotion) {
+        window.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+            orbs.forEach((orb, i) => {
+                const speed = (i + 1) * 12;
+                orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        }, { passive: true });
+    }
 
 
     // ================================================
@@ -368,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     const tiltCards = document.querySelectorAll('.skill-category, .cert-card, .education-card, .reference-card');
 
-    tiltCards.forEach(card => {
+    if (!prefersReducedMotion) tiltCards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
@@ -388,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     const magneticBtns = document.querySelectorAll('.btn');
 
-    magneticBtns.forEach(btn => {
+    if (!prefersReducedMotion) magneticBtns.forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const rect = btn.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;

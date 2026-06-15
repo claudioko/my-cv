@@ -15,8 +15,10 @@
     <link rel="canonical" href="https://claudioko.github.io/my-cv/">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="profilepic.png">
-    <link rel="apple-touch-icon" href="profilepic.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="color-scheme" content="dark light">
 
     <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
     <meta property="og:type" content="website">
@@ -24,9 +26,9 @@
     <meta property="og:title" content="Claudio Meneses Donoso — Full Stack Developer">
     <meta property="og:description"
         content="Full Stack Developer with 14+ years of experience in .NET, Java, React, Vue.js and more. Open to new challenges.">
-    <meta property="og:image" content="https://claudioko.github.io/my-cv/profilepic.png">
-    <meta property="og:image:width" content="400">
-    <meta property="og:image:height" content="400">
+    <meta property="og:image" content="https://claudioko.github.io/my-cv/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="1200">
     <meta property="og:image:alt" content="Claudio Meneses Donoso — Full Stack Developer">
     <meta property="og:locale" content="es_CL">
     <meta property="og:locale:alternate" content="en_US">
@@ -38,7 +40,7 @@
     <meta name="twitter:title" content="Claudio Meneses Donoso — Full Stack Developer">
     <meta name="twitter:description"
         content="Full Stack Developer with 14+ years of experience in .NET, Java, React, Vue.js and more.">
-    <meta name="twitter:image" content="https://claudioko.github.io/my-cv/profilepic.png">
+    <meta name="twitter:image" content="https://claudioko.github.io/my-cv/og-image.jpg">
     <meta name="twitter:image:alt" content="Claudio Meneses Donoso">
 
     <!-- Fonts -->
@@ -51,6 +53,9 @@
 </head>
 
 <body>
+
+    <!-- Skip to content (accessibility) -->
+    <a class="skip-link" href="#main" data-i18n="a11y.skip">Saltar al contenido</a>
 
     <!-- Scroll Progress Bar -->
     <div id="scrollProgress"></div>
@@ -103,17 +108,17 @@
             </ul>
             <!-- Language Toggle -->
             <div class="nav-actions">
-                <button class="lang-toggle" id="langToggle" aria-label="Toggle language">
-                    <span class="lang-option active" data-lang="es">
-                        <img src="https://flagcdn.com/20x15/es.png" width="20" height="15" alt="ES"
+                <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma">
+                    <button type="button" class="lang-option active" data-lang="es" aria-pressed="true">
+                        <img src="https://flagcdn.com/20x15/es.png" width="20" height="15" alt="" aria-hidden="true"
                             style="vertical-align:middle; border-radius:2px; margin-right:3px;">ES
-                    </span>
-                    <span class="lang-separator">/</span>
-                    <span class="lang-option" data-lang="en">
-                        <img src="https://flagcdn.com/20x15/us.png" width="20" height="15" alt="US"
+                    </button>
+                    <span class="lang-separator" aria-hidden="true">/</span>
+                    <button type="button" class="lang-option" data-lang="en" aria-pressed="false">
+                        <img src="https://flagcdn.com/20x15/us.png" width="20" height="15" alt="" aria-hidden="true"
                             style="vertical-align:middle; border-radius:2px; margin-right:3px;">EN
-                    </span>
-                </button>
+                    </button>
+                </div>
                 <!-- Theme Toggle -->
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <svg class="theme-icon sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -134,7 +139,10 @@
                     </svg>
                 </button>
             </div>
+        </div>
     </nav>
+
+    <main id="main" tabindex="-1">
 
     <!-- Hero Section -->
     <section class="hero" id="hero">
@@ -187,7 +195,11 @@
             <div class="hero-visual reveal">
                 <div class="hero-avatar">
                     <div class="avatar-ring"></div>
-                    <img src="profilepic.png" alt="Claudio Meneses Donoso" class="avatar-photo">
+                    <picture>
+                        <source srcset="avatar.webp" type="image/webp">
+                        <img src="avatar.jpg" alt="Claudio Meneses Donoso — Full Stack Developer"
+                            class="avatar-photo" width="480" height="480" decoding="async" fetchpriority="high">
+                    </picture>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-card">
@@ -374,7 +386,7 @@
                                     Proyectos</h3>
                                 <p class="timeline-company">A&B Solutions Pro · Santiago, Chile</p>
                             </div>
-                            <span class="timeline-date" data-i18n="exp.ab.date">Nov 2017 — Dic 2021</span>
+                            <span class="timeline-date" data-i18n="exp.ab.date">Nov 2017 — Sep 2022</span>
                         </div>
                         <ul class="timeline-details">
                             <li data-i18n="exp.ab.d1">Lideré la gestión técnica y funcional de proyectos de software
@@ -937,7 +949,8 @@
         </div>
     </section>
 
-    <!-- Contact / Footer -->
+    </main>
+
     <!-- Contact / Footer -->
     <footer class="footer" id="contact">
         <!-- Gradient top accent -->
@@ -1044,8 +1057,8 @@
         </div>
     </footer>
 
-    <script src="i18n.js"></script>
-    <script src="script.js"></script>
+    <script defer src="i18n.js"></script>
+    <script defer src="script.js"></script>
 </body>
 
 </html>

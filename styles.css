@@ -10,7 +10,7 @@
 
     --text-primary: #e8e8ed;
     --text-secondary: #9090a0;
-    --text-muted: #5f5f70;
+    --text-muted: #8a8a9c;
 
     --accent: #6c63ff;
     --accent-light: #8b83ff;
@@ -51,10 +51,10 @@
 
     --text-primary: #1a1a2e;
     --text-secondary: #4a4a60;
-    --text-muted: #7a7a90;
+    --text-muted: #5f5f74;
 
     --accent: #5b52e0;
-    --accent-light: #6c63ff;
+    --accent-light: #5b52e0;
     --accent-dark: #4840b8;
     --accent-glow: rgba(108, 99, 255, 0.1);
 
@@ -336,9 +336,16 @@ body.custom-cursor * {
 .lang-option {
     color: var(--text-muted);
     cursor: pointer;
-    padding: 2px 4px;
+    padding: 4px 6px;
     border-radius: 4px;
     transition: all 0.3s ease;
+    /* reset native button styles (these are real <button>s for keyboard a11y) */
+    background: none;
+    border: none;
+    font: inherit;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
 }
 
 .lang-option:hover {
@@ -763,6 +770,10 @@ body.custom-cursor * {
     object-position: center top;
     border: 3px solid var(--bg-primary);
     display: block;
+}
+
+.hero-avatar picture {
+    display: contents;
 }
 
 .hero-stats {
@@ -1863,6 +1874,14 @@ a.footer-contact-item:hover {
     background: #fff;
 }
 
+[data-theme="light"] .live-badge {
+    color: #15803d;
+}
+
+[data-theme="light"] .footer-open-badge {
+    color: #166534;
+}
+
 /* Smooth theme transitions */
 * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -2131,5 +2150,156 @@ a.footer-contact-item:hover {
         flex-direction: column;
         text-align: center;
         gap: 6px;
+    }
+}
+
+/* ===========================
+   Accessibility: Skip Link
+   =========================== */
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -100px;
+    z-index: 2000;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* ===========================
+   Visible keyboard focus
+   =========================== */
+a:focus-visible,
+button:focus-visible,
+.lang-option:focus-visible,
+.nav-link:focus-visible,
+.cert-card:focus-visible {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+main:focus {
+    outline: none;
+}
+
+/* ===========================
+   Reduced Motion (WCAG 2.2.2)
+   =========================== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .typing-cursor {
+        display: none !important;
+    }
+}
+
+/* ===========================
+   Print Styles (CV is meant to be printed)
+   =========================== */
+@media print {
+
+    :root,
+    :root[data-theme="light"] {
+        --bg-primary: #ffffff;
+        --bg-secondary: #ffffff;
+        --bg-card: #ffffff;
+        --bg-card-hover: #ffffff;
+        --bg-glass: #ffffff;
+        --text-primary: #111111;
+        --text-secondary: #333333;
+        --text-muted: #555555;
+        --accent: #4f47cc;
+        --accent-light: #4f47cc;
+        --border-color: #cccccc;
+        --shadow-sm: none;
+        --shadow-md: none;
+        --shadow-lg: none;
+        --shadow-glow: none;
+    }
+
+    html,
+    body {
+        background: #fff !important;
+        color: #111 !important;
+    }
+
+    /* Reveal content normally hidden until scrolled into view */
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Hide interactive / decorative chrome */
+    #scrollProgress,
+    #cursorDot,
+    #cursorRing,
+    .social-sidebar,
+    .navbar,
+    .hero-bg-effects,
+    #particleCanvas,
+    .hero-orb,
+    .scroll-indicator,
+    .avatar-ring,
+    .code-card,
+    .footer-gradient-bar,
+    .footer-socials,
+    .skip-link {
+        display: none !important;
+    }
+
+    .skill-bar-fill,
+    .language-fill {
+        transition: none !important;
+    }
+
+    .hero {
+        min-height: auto !important;
+    }
+
+    .section,
+    .hero {
+        padding: 14px 0 !important;
+    }
+
+    .timeline-item,
+    .skill-category,
+    .cert-card,
+    .education-card,
+    .reference-card {
+        page-break-inside: avoid;
+        box-shadow: none !important;
+    }
+
+    a {
+        color: #111 !important;
+        text-decoration: none;
     }
 }
