@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Respect users who prefer reduced motion (accessibility / battery)
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Activate the web fonts, loaded non-render-blocking via media="print"
+    const googleFonts = document.getElementById('googleFonts');
+    if (googleFonts) googleFonts.media = 'all';
+
     // ================================================
     // 1. SCROLL PROGRESS BAR
     // ================================================
@@ -550,9 +554,13 @@ function loadPdfMake() {
     return new Promise((resolve, reject) => {
         const s1 = document.createElement('script');
         s1.src = 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js';
+        s1.integrity = 'sha384-vseuUuO/VRMn00lXYd5m/Pk4l/7RjMqhXGf6G0RALy+On0txYb39dQsUQDAd7q5L';
+        s1.crossOrigin = 'anonymous';
         s1.onload = () => {
             const s2 = document.createElement('script');
             s2.src = 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js';
+            s2.integrity = 'sha384-zmD5tDN2awbMigS/yVcxHObSsdXXKh/27Y/bSII38WfNl+D7O/aVCIteAXsLY3p3';
+            s2.crossOrigin = 'anonymous';
             s2.onload = resolve;
             s2.onerror = reject;
             document.head.appendChild(s2);
