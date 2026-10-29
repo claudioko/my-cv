@@ -81,6 +81,8 @@ const translations = {
         // Skills
         'skills.title': 'Skills <span class="accent">Técnicas</span>',
         'skills.databases': 'Bases de Datos',
+        'skills.devops': 'DevOps & QA',
+        'skills.aitools': 'AI Tools',
 
         // Education
         'edu.title': 'Educación <span class="accent">& Idiomas</span>',
@@ -103,17 +105,10 @@ const translations = {
         'certs.docker.date': 'Udemy · Mar 2025',
         'certs.oracle.date': 'Udemy · Ene 2025',
 
-        // Skills
-        'skills.title': 'Skills <span class="accent">Técnicas</span>',
-        'skills.databases': 'Bases de Datos',
-        'skills.devops': 'DevOps & QA',
-        'skills.aitools': 'AI Tools',
-
         // References
         'refs.title': 'Referencias <span class="accent">Profesionales</span>',
 
         // Footer
-        'footer.role': 'Desarrollador Full Stack',
         'footer.tagline': 'Construyendo software que importa, una línea a la vez.',
         'footer.nav_title': 'Navegación',
         'footer.contact_title': 'Contacto',
@@ -122,6 +117,12 @@ const translations = {
         'footer.location': 'Ñuñoa, Santiago, Chile',
         'footer.made_with': 'Hecho con ❤️ en Santiago, Chile',
         'footer.source_code': '🔗 Ver proyecto en',
+
+        // PDF
+        'pdf.generating': 'Generando PDF...',
+        'pdf.course': 'Curso',
+        'pdf.hours': 'Horas',
+        'pdf.institution': 'Institución / Fecha',
     },
 
     en: {
@@ -202,6 +203,8 @@ const translations = {
         // Skills
         'skills.title': 'Technical <span class="accent">Skills</span>',
         'skills.databases': 'Databases',
+        'skills.devops': 'DevOps & QA',
+        'skills.aitools': 'AI Tools',
 
         // Education
         'edu.title': 'Education <span class="accent">& Languages</span>',
@@ -224,17 +227,10 @@ const translations = {
         'certs.docker.date': 'Udemy · Mar 2025',
         'certs.oracle.date': 'Udemy · Jan 2025',
 
-        // Skills
-        'skills.title': 'Technical <span class="accent">Skills</span>',
-        'skills.databases': 'Databases',
-        'skills.devops': 'DevOps & QA',
-        'skills.aitools': 'AI Tools',
-
         // References
         'refs.title': 'Professional <span class="accent">References</span>',
 
         // Footer
-        'footer.role': 'Full Stack Developer',
         'footer.tagline': 'Building software that matters, one line at a time.',
         'footer.nav_title': 'Navigation',
         'footer.contact_title': 'Contact',
@@ -243,6 +239,12 @@ const translations = {
         'footer.location': 'Ñuñoa, Santiago, Chile',
         'footer.made_with': 'Made with ❤️ in Santiago, Chile',
         'footer.source_code': '🔗 See project on',
+
+        // PDF
+        'pdf.generating': 'Generating PDF...',
+        'pdf.course': 'Course',
+        'pdf.hours': 'Hours',
+        'pdf.institution': 'Institution / Date',
     }
 };
 
@@ -257,20 +259,11 @@ function setLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
 
-    // Update text-only elements
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key] !== undefined) {
-            el.textContent = t[key];
-        }
-    });
-
-    // Update elements with HTML content (spans, strong, etc.)
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-        const key = el.getAttribute('data-i18n-html');
-        if (t[key] !== undefined) {
-            el.innerHTML = t[key];
-        }
+    // data-i18n sets plain text; data-i18n-html allows markup (spans, strong, etc.)
+    document.querySelectorAll('[data-i18n], [data-i18n-html]').forEach(el => {
+        const { i18n, i18nHtml } = el.dataset;
+        if (i18n && t[i18n] !== undefined) el.textContent = t[i18n];
+        if (i18nHtml && t[i18nHtml] !== undefined) el.innerHTML = t[i18nHtml];
     });
 
     // Update CV download link
