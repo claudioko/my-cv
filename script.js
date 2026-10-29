@@ -12,14 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (googleFonts) googleFonts.media = 'all';
 
     // ================================================
-    // 1. SCROLL PROGRESS BAR
+    // 1. SCROLL PROGRESS BAR + NAVBAR STATE
     // ================================================
     const scrollProgress = document.getElementById('scrollProgress');
-    window.addEventListener('scroll', () => {
-        const total = document.body.scrollHeight - window.innerHeight;
-        const progress = (window.scrollY / total) * 100;
-        if (scrollProgress) scrollProgress.style.width = progress + '%';
-    }, { passive: true });
+    const navbar = document.getElementById('navbar');
+    function onScroll() {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (scrollProgress) scrollProgress.style.width = (total > 0 ? window.scrollY / total * 100 : 0) + '%';
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
 
     // ================================================
@@ -40,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.height = canvas.offsetHeight;
         }
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas, { passive: true });
 
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
@@ -100,18 +102,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function connectParticles() {
             const maxDist = 120;
+            ctx.lineWidth = 0.5;
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < maxDist) {
-                        const alpha = (1 - dist / maxDist) * 0.3;
+                    const distSq = dx * dx + dy * dy;
+                    if (distSq < maxDist * maxDist) {
+                        const alpha = (1 - Math.sqrt(distSq) / maxDist) * 0.3;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.strokeStyle = `rgba(${particleRGB}, ${alpha})`;
-                        ctx.lineWidth = 0.5;
                         ctx.stroke();
                     }
                 }
@@ -149,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('visibilitychange', syncParticles);
         syncParticles();
 
-        window.addEventListener('resize', initParticles, { passive: true });
+        window.addEventListener('resize', () => { resizeCanvas(); initParticles(); }, { passive: true });
     }
 
 
@@ -158,9 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     const typingEl = document.getElementById('typingText');
     if (typingEl && !prefersReducedMotion) {
-        const phrases = [
-            'Full Stack Developer',
-            'Desarrollador Full Stack',
+        // The first phrase is the translated title, so it follows the language toggle
+        const phrases = () => [
+            translations[currentLang]['hero.title'],
             'Backend Engineer',
             'Frontend Engineer',
             'QA / Automation',
@@ -168,10 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let phraseIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        let typingTimer;
 
         function type() {
-            const current = phrases[phraseIndex];
+            const list = phrases();
+            const current = list[phraseIndex];
             if (isDeleting) {
                 typingEl.textContent = current.substring(0, charIndex - 1);
                 charIndex--;
@@ -182,15 +184,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let delay = isDeleting ? 60 : 100;
 
-            if (!isDeleting && charIndex === current.length) {
+            // >= because a language switch can shorten the phrase mid-typing
+            if (!isDeleting && charIndex >= current.length) {
+                charIndex = current.length;
                 delay = 2200;
                 isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
+            } else if (isDeleting && charIndex <= 0) {
                 isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
+                phraseIndex = (phraseIndex + 1) % list.length;
                 delay = 400;
             }
-            typingTimer = setTimeout(type, delay);
+            setTimeout(type, delay);
         }
         setTimeout(type, 1000);
     }
@@ -242,36 +246,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
-    let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
-    let ringActive = false;
 
     if (cursorDot && cursorRing && !prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
         document.body.classList.add('custom-cursor');
+        let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
+        let ringFrame = null;
+
+        // The ring eases towards the dot; the loop stops once it has caught up
+        function animateRing() {
+            ringX += (dotX - ringX) * 0.22;
+            ringY += (dotY - ringY) * 0.22;
+            cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
+            ringFrame = Math.abs(dotX - ringX) + Math.abs(dotY - ringY) > 0.5
+                ? requestAnimationFrame(animateRing) : null;
+        }
 
         document.addEventListener('mousemove', (e) => {
             dotX = e.clientX;
             dotY = e.clientY;
             cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+            if (!ringFrame) ringFrame = requestAnimationFrame(animateRing);
         }, { passive: true });
 
-        function animateRing() {
-            ringX += (dotX - ringX) * 0.22;
-            ringY += (dotY - ringY) * 0.22;
-            cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
-            requestAnimationFrame(animateRing);
-        }
-        animateRing();
-
-        document.querySelectorAll('a, button, .cert-card, .skill-category, .timeline-content').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorRing.classList.add('expanded');
-                cursorDot.classList.add('hidden');
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorRing.classList.remove('expanded');
-                cursorDot.classList.remove('hidden');
-            });
-        });
+        const hoverTargets = 'a, button, .cert-card, .skill-category, .timeline-content';
+        document.addEventListener('mouseover', (e) => {
+            const hovering = !!e.target.closest(hoverTargets);
+            cursorRing.classList.toggle('expanded', hovering);
+            cursorDot.classList.toggle('hidden', hovering);
+        }, { passive: true });
 
         document.addEventListener('mouseleave', () => {
             cursorDot.style.opacity = '0';
@@ -285,9 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 6. SCROLL REVEAL ANIMATION
+    // 6. SCROLL REVEAL ANIMATION (+ skill / language bars)
     // ================================================
-    const revealElements = document.querySelectorAll('.reveal');
+    // Bars grow to --w once they get the .visible class (see styles.css)
+    document.querySelectorAll('[data-width]').forEach(bar => {
+        bar.style.setProperty('--w', bar.dataset.width + '%');
+    });
+
+    const revealElements = document.querySelectorAll('.reveal, [data-width]');
 
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -305,17 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 7. NAVBAR SCROLL BEHAVIOR
-    // ================================================
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
-    }, { passive: true });
-
-
-    // ================================================
-    // 8. MOBILE NAV TOGGLE
+    // 7. MOBILE NAV TOGGLE
     // ================================================
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
@@ -326,14 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
-    navToggle.setAttribute('aria-expanded', 'false');
-    navToggle.setAttribute('aria-controls', 'navMenu');
-
     navToggle.addEventListener('click', () => {
         setMenuOpen(!navMenu.classList.contains('active'));
     });
 
-    document.querySelectorAll('.nav-link').forEach(link => {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
         link.addEventListener('click', () => setMenuOpen(false));
     });
 
@@ -353,30 +348,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 9. SMOOTH SCROLL
-    // ================================================
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = document.querySelector(anchor.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-        });
-    });
-
-
-    // ================================================
-    // 10. ACTIVE NAV LINK ON SCROLL
+    // 8. ACTIVE NAV LINK ON SCROLL
     // ================================================
     const sections = document.querySelectorAll('section[id]');
 
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const id = entry.target.getAttribute('id');
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${id}`) link.classList.add('active');
-                });
+                const href = `#${entry.target.id}`;
+                navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === href));
             }
         });
     }, {
@@ -388,28 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 11. ANIMATE LANGUAGE BARS
-    // ================================================
-    const languageFills = document.querySelectorAll('.language-fill');
-
-    const langObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const width = entry.target.style.width;
-                entry.target.style.width = '0%';
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => { entry.target.style.width = width; });
-                });
-                langObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    languageFills.forEach(fill => langObserver.observe(fill));
-
-
-    // ================================================
-    // 12. PARALLAX HERO ORBS (Mouse)
+    // 9. PARALLAX HERO ORBS (Mouse)
     // ================================================
     const orbs = document.querySelectorAll('.hero-orb');
 
@@ -426,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 13. TILT EFFECT ON CARDS
+    // 10. TILT EFFECT ON CARDS
     // ================================================
     const tiltCards = document.querySelectorAll('.skill-category, .cert-card, .education-card, .reference-card');
 
@@ -446,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 14. MAGNETIC BUTTONS
+    // 11. MAGNETIC BUTTONS
     // ================================================
     const magneticBtns = document.querySelectorAll('.btn');
 
@@ -466,51 +425,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ================================================
-    // 15. SKILL BAR ANIMATIONS
-    // ================================================
-    const skillBars = document.querySelectorAll('.skill-bar-fill');
-
-    const skillBarObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const width = entry.target.getAttribute('data-width');
-                setTimeout(() => {
-                    entry.target.style.width = width + '%';
-                }, 200);
-                skillBarObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
-
-    skillBars.forEach(bar => skillBarObserver.observe(bar));
-
-
-    // ================================================
-    // 16. THEME TOGGLE (Light / Dark)
+    // 12. THEME TOGGLE (Light / Dark)
     // ================================================
     const themeToggle = document.getElementById('themeToggle');
     const root = document.documentElement;
+    const lightQuery = window.matchMedia('(prefers-color-scheme: light)');
 
-    function setTheme(theme) {
+    // The initial theme is set before first paint by theme-init.js
+    function applyTheme(theme) {
         root.setAttribute('data-theme', theme);
-        localStorage.setItem('preferred-theme', theme);
     }
 
-    const savedTheme = localStorage.getItem('preferred-theme');
-    if (savedTheme) setTheme(savedTheme);
-    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) setTheme('light');
-
     themeToggle.addEventListener('click', () => {
-        const current = root.getAttribute('data-theme');
-        setTheme(current === 'light' ? 'dark' : 'light');
+        const theme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        applyTheme(theme);
+        localStorage.setItem('preferred-theme', theme);
     });
 
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('preferred-theme')) setTheme(e.matches ? 'light' : 'dark');
+    lightQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('preferred-theme')) applyTheme(e.matches ? 'light' : 'dark');
     });
 
     // ================================================
-    // 17. PDF CV DOWNLOAD
+    // 13. PDF CV DOWNLOAD
     // ================================================
     initPdfDownload();
 
@@ -543,7 +480,7 @@ function readSkillGroups() {
         title: pdfText(cat.querySelector('.skill-category-header h3')),
         items: [...cat.querySelectorAll('.skill-item')].map(it => ({
             n: pdfText(it.querySelector('.skill-name')),
-            v: parseInt(it.querySelector('.skill-bar-fill').getAttribute('data-width'), 10) || 0
+            v: parseInt(it.querySelector('.skill-bar-fill').dataset.width, 10) || 0
         }))
     }));
 }
@@ -558,7 +495,7 @@ function readEducation() {
         languages: [...document.querySelectorAll('#education .language-item')].map(li => ({
             label:    pdfText(li.querySelector('.language-info span')),
             sublabel: pdfText(li.querySelector('.language-level')),
-            pct:      parseFloat(li.querySelector('.language-fill').style.width) || 0
+            pct:      parseInt(li.querySelector('.language-fill').dataset.width, 10) || 0
         }))
     };
 }
@@ -605,7 +542,7 @@ function loadPdfMake() {
 }
 
 function buildCvDoc() {
-    const lang   = currentLang;
+    const t      = translations[currentLang];
     const ACCENT = '#6c63ff';
     const DARK   = '#1a1a2e';
     const BODY   = '#333333';
@@ -631,39 +568,30 @@ function buildCvDoc() {
         return { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 0.5, color: LGRAY }], margin: [0, 0, 0, 8] };
     }
 
+    // Text columns followed by a filled / empty bar `len` points long
+    function barRow(cols, pct, len, width) {
+        const fw = +(pct * len / 100).toFixed(1);
+        const ew = +(len - fw).toFixed(1);
+        const rects = [{ type: 'rect', x: 0, y: 4, w: Math.max(fw, 1), h: 5, r: 2, color: ACCENT }];
+        if (ew > 0) rects.push({ type: 'rect', x: fw + 1, y: 4, w: Math.max(ew, 0.5), h: 5, r: 2, color: LGRAY });
+        return { columns: [...cols, { canvas: rects, width }], margin: [0, 2, 0, 2] };
+    }
+
     function skillBar(name, pct) {
-        const fw = +(pct * 0.62).toFixed(1);
-        const ew = +((100 - pct) * 0.62).toFixed(1);
-        return {
-            columns: [
-                { text: name, width: 108, fontSize: 8, color: BODY },
-                { text: pct + '%', width: 26, fontSize: 8, color: ACCENT, bold: true, alignment: 'right' },
-                { canvas: [
-                    { type: 'rect', x: 0, y: 4, w: Math.max(fw, 1), h: 5, r: 2, color: ACCENT },
-                    { type: 'rect', x: fw + 1, y: 4, w: Math.max(ew, 1), h: 5, r: 2, color: LGRAY }
-                ], width: 68 }
-            ],
-            margin: [0, 2, 0, 2]
-        };
+        return barRow([
+            { text: name, width: 108, fontSize: 8, color: BODY },
+            { text: pct + '%', width: 26, fontSize: 8, color: ACCENT, bold: true, alignment: 'right' }
+        ], pct, 62, 68);
     }
 
     function langBar(label, sublabel, pct) {
-        const fw = +(pct * 0.95).toFixed(1);
-        const ew = +((100 - pct) * 0.95).toFixed(1);
-        return {
-            columns: [
-                { text: label, width: 52, fontSize: 8, color: BODY },
-                { text: sublabel, width: 72, fontSize: 8, color: MUTED },
-                { canvas: [
-                    { type: 'rect', x: 0, y: 4, w: Math.max(fw, 1), h: 5, r: 2, color: ACCENT },
-                    { type: 'rect', x: fw + 1, y: 4, w: Math.max(ew, 0.5), h: 5, r: 2, color: LGRAY }
-                ], width: 98 }
-            ],
-            margin: [0, 2, 0, 2]
-        };
+        return barRow([
+            { text: label, width: 52, fontSize: 8, color: BODY },
+            { text: sublabel, width: 72, fontSize: 8, color: MUTED }
+        ], pct, 95, 98);
     }
 
-    // --- Header (name/contact are static; the role tracks the current position) ---
+    // --- Header (name/links are static; role and location come from the page) ---
     const headerBlock = [
         { text: 'Claudio Meneses Donoso', fontSize: 22, bold: true, color: ACCENT },
         { text: exp.length ? exp[0].role : '', fontSize: 12, color: ACCENT, margin: [0, 3, 0, 0] },
@@ -676,7 +604,7 @@ function buildCvDoc() {
                 { text: '   |   ', color: MUTED },
                 { text: 'github.com/claudioko', color: ACCENT },
                 { text: '   |   ', color: MUTED },
-                { text: 'Nuñoa, Santiago, Chile', color: BODY }
+                { text: pdfText(document.querySelector('.hero-location')), color: BODY }
             ],
             fontSize: 8.5,
             margin: [0, 0, 0, 4]
@@ -730,7 +658,7 @@ function buildCvDoc() {
             {
                 width: '50%',
                 stack: [
-                    { text: (lang === 'es' ? 'Educación' : 'Education').toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
+                    { text: t['nav.education'].toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
                     { text: edu.degree, bold: true, fontSize: 9, color: DARK },
                     { text: edu.school, fontSize: 8.5, color: BODY },
                     { text: edu.date, fontSize: 8, color: MUTED, margin: [0, 1, 0, 0] }
@@ -739,7 +667,7 @@ function buildCvDoc() {
             {
                 width: '50%',
                 stack: [
-                    { text: (lang === 'es' ? 'Idiomas' : 'Languages').toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
+                    { text: t['edu.languages_title'].toUpperCase(), bold: true, fontSize: 9, color: DARK, margin: [0, 0, 0, 4] },
                     ...edu.languages.map(l => langBar(l.label, l.sublabel, l.pct))
                 ]
             }
@@ -749,16 +677,20 @@ function buildCvDoc() {
     };
 
     // --- Certifications ---
+    const headCell = { bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK };
     const certHeader = [
-        { text: lang === 'es' ? 'Curso' : 'Course', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK },
-        { text: lang === 'es' ? 'Horas' : 'Hours', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK, alignment: 'center' },
-        { text: lang === 'es' ? 'Institución / Fecha' : 'Institution / Date', bold: true, fontSize: 8.5, fillColor: '#ede9ff', color: DARK }
+        { ...headCell, text: t['pdf.course'] },
+        { ...headCell, text: t['pdf.hours'], alignment: 'center' },
+        { ...headCell, text: t['pdf.institution'] }
     ];
-    const certRows = certs.map((cert, i) => [
-        { text: cert.name, fontSize: 8, color: BODY, fillColor: i % 2 === 0 ? '#ffffff' : ROALT },
-        { text: cert.hours, fontSize: 8, color: ACCENT, alignment: 'center', fillColor: i % 2 === 0 ? '#ffffff' : ROALT },
-        { text: cert.date, fontSize: 8, color: MUTED, fillColor: i % 2 === 0 ? '#ffffff' : ROALT }
-    ]);
+    const certRows = certs.map((cert, i) => {
+        const fillColor = i % 2 === 0 ? '#ffffff' : ROALT;
+        return [
+            { text: cert.name, fontSize: 8, color: BODY, fillColor },
+            { text: cert.hours, fontSize: 8, color: ACCENT, alignment: 'center', fillColor },
+            { text: cert.date, fontSize: 8, color: MUTED, fillColor }
+        ];
+    });
     const certsBlock = {
         table: {
             headerRows: 1,
@@ -815,12 +747,10 @@ function initPdfDownload() {
         const originalText = span ? span.textContent : '';
         if (btn.dataset.generating) return;
         btn.dataset.generating = '1';
-        if (span) span.textContent = currentLang === 'es' ? 'Generando PDF...' : 'Generating PDF...';
+        if (span) span.textContent = translations[currentLang]['pdf.generating'];
         try {
             await loadPdfMake();
-            const doc = buildCvDoc();
-            const fname = currentLang === 'es' ? 'Claudio-Meneses-CV-ES.pdf' : 'Claudio-Meneses-CV-EN.pdf';
-            pdfMake.createPdf(doc).download(fname);
+            pdfMake.createPdf(buildCvDoc()).download(`Claudio-Meneses-CV-${currentLang.toUpperCase()}.pdf`);
         } catch (err) {
             console.error('PDF generation error:', err);
             window.open(CV_URLS[currentLang], '_blank');

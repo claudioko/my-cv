@@ -129,6 +129,14 @@ ul {
     padding: 0 24px;
 }
 
+/* Hidden container for the <symbol> icons reused via <use> */
+.svg-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
 .accent {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
@@ -348,6 +356,12 @@ body.custom-cursor * {
     line-height: 1;
     display: inline-flex;
     align-items: center;
+}
+
+.lang-option img {
+    vertical-align: middle;
+    border-radius: 2px;
+    margin-right: 3px;
 }
 
 .lang-option:hover {
@@ -915,11 +929,6 @@ body.custom-cursor * {
 }
 
 /* comment */
-.c-cls {
-    color: #ffcb6b;
-}
-
-/* class */
 
 /* Scroll Indicator */
 .scroll-indicator {
@@ -1292,43 +1301,6 @@ body.custom-cursor * {
     background: linear-gradient(90deg, #8b5cf6, #a78bfa);
 }
 
-/* Also keep tag styles for use elsewhere */
-.skill-tag {
-    font-size: 0.85rem;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    transition: all 0.3s ease;
-}
-
-.skill-tag:hover {
-    transform: translateY(-2px);
-}
-
-.skill-tag.backend {
-    background: rgba(99, 255, 132, 0.08);
-    color: #63ff84;
-    border: 1px solid rgba(99, 255, 132, 0.15);
-}
-
-.skill-tag.frontend {
-    background: rgba(99, 179, 255, 0.08);
-    color: #63b3ff;
-    border: 1px solid rgba(99, 179, 255, 0.15);
-}
-
-.skill-tag.database {
-    background: rgba(255, 179, 99, 0.08);
-    color: #ffb363;
-    border: 1px solid rgba(255, 179, 99, 0.15);
-}
-
-.skill-tag.devops {
-    background: rgba(255, 99, 179, 0.08);
-    color: #ff63b3;
-    border: 1px solid rgba(255, 99, 179, 0.15);
-}
-
 /* ===========================
    Education Section
    =========================== */
@@ -1414,9 +1386,16 @@ body.custom-cursor * {
 
 .language-fill {
     height: 100%;
+    width: 0%;
     background: var(--gradient-primary);
     border-radius: 3px;
     transition: width 1.5s ease;
+}
+
+/* Bars grow to --w (set from data-width in script.js) once revealed */
+.skill-bar-fill.visible,
+.language-fill.visible {
+    width: var(--w);
 }
 
 /* ===========================
@@ -1750,34 +1729,9 @@ a.footer-contact-item:hover {
     color: var(--text-muted);
 }
 
-.footer-heart {
-    color: #f43f5e;
-    display: inline-block;
-    animation: heartbeat 1.4s ease infinite;
-}
-
-@keyframes heartbeat {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    14% {
-        transform: scale(1.3);
-    }
-
-    28% {
-        transform: scale(1);
-    }
-
-    42% {
-        transform: scale(1.2);
-    }
-
-    70% {
-        transform: scale(1);
-    }
+.footer-source-link {
+    color: var(--accent-light);
+    font-weight: 600;
 }
 
 /* ===========================
@@ -1823,14 +1777,6 @@ a.footer-contact-item:hover {
 
 [data-theme="light"] .hero-orb-3 {
     background: rgba(236, 72, 153, 0.06);
-}
-
-[data-theme="light"] .avatar-initials {
-    border-color: var(--bg-primary);
-}
-
-[data-theme="light"] .skill-bar-track {
-    background: rgba(0, 0, 0, 0.07);
 }
 
 [data-theme="light"] .language-bar {
@@ -1890,8 +1836,6 @@ a.footer-contact-item:hover {
 }
 
 .btn,
-.skill-bar-fill,
-.language-fill,
 .code-card {
     transition: all 0.3s ease;
 }
@@ -2021,10 +1965,6 @@ a.footer-contact-item:hover {
         height: 140px;
     }
 
-    .avatar-initials {
-        font-size: 2.8rem;
-    }
-
     .hero-stats {
         flex-wrap: wrap;
         justify-content: center;
@@ -2080,15 +2020,6 @@ a.footer-contact-item:hover {
 
     .timeline-details li {
         font-size: 0.83rem;
-    }
-
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-links {
-        align-items: center;
     }
 
     .btn {
@@ -2279,6 +2210,7 @@ main:focus {
 
     .skill-bar-fill,
     .language-fill {
+        width: var(--w) !important;
         transition: none !important;
     }
 

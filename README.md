@@ -29,6 +29,7 @@ my-cv/
 ├── index.html      # Main HTML — all sections and content
 ├── styles.css      # All styles & responsive media queries
 ├── script.js       # Animations, interactions, PDF generation
+├── theme-init.js   # Applies saved/system theme before first paint
 └── i18n.js         # Translation strings (ES / EN) + CV_URLS
 ```
 
