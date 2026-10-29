@@ -431,11 +431,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const root = document.documentElement;
     const lightQuery = window.matchMedia('(prefers-color-scheme: light)');
 
+    // The initial theme is set before first paint by theme-init.js
     function applyTheme(theme) {
         root.setAttribute('data-theme', theme);
     }
-
-    applyTheme(localStorage.getItem('preferred-theme') || (lightQuery.matches ? 'light' : 'dark'));
 
     themeToggle.addEventListener('click', () => {
         const theme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
